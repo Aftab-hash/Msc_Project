@@ -1,0 +1,25 @@
+Alignment generated on the basis of profile
+Total Sequences: 158
+Matched: 36
+Mismatches: 109
+Insertions: 4
+Deletions: 9
+Identity: 22.78%
+Score: -49.0
+
+C0HJR0    MGLSDGEWQLVLNAWGKV---EADVAGHGQEVLIRLFTGHPETLEKFDKF
+P80722    MVLTKDEFDSLLHELDPKIDTEEHRMELGLGAYTELFAAHPEYIKKFSRL
+          *:*:::*::::*::::::   *::::::*::::::**::***:::**:::
+
+C0HJR0    KHLKTEAEMKASEDLKKHGNTVLTALGGILKKKGHHEAEVKHLAESHANK
+P80722    QE-ATPANVMAQDGAKYYAKTLINDLVELLKASTDEATLNTAIARTATKD
+          :: :*:*:::*::::*::::*::::*:::**::::::::::::*::::::
+
+C0HJR0    HKI-PVKYLEFISDAIIHVLHAKHPSDFGADAQGAMSKALELFRNDMAAQ
+P80722    HKPRNVSGAEFQTGEPIFIKYFSHVLTTPAN-QAFMEKLLTKIFTGVAGQ
+          **: :*:::**:::::*::::::*:::::*: *::*:*:*:::::::*:*
+
+C0HJR0    YKVLGFQG
+P80722    L-------
+          :       
+

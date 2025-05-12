@@ -1,0 +1,19 @@
+Matrix Used: BLOSUM62
+Gap Open Penalty: -12
+Gap Extend Penalty: -2
+Cumulative Identity: 23.27%
+Alignment Score: 38.0
+Total Matches: 37
+Total Positions: 159
+
+C0HJR0     MGLSDGEWQLVLNAWGKVEADVAGHGQEV----LIRLFTGHPETLEKFDKFKHLKTEAEM
+           *:*:::*::::*::::: ::*:::*::*:    :::**::***:::**::::: :*:*::
+P80722     MVLTKDEFDSLLHELDP-KIDTEEHRMELGLGAYTELFAAHPEYIKKFSRLQE-ATPANV
+
+C0HJR0     KASEDLKKHGNTVLTALGGILKKKGHHEAEVKHLAESHANKHK-IPVKYLEFISDAIIHV
+           :*::::*::::*::::*:::**::::::::::::*::::::** ::*:::**:::::*::
+P80722     MAQDGAKYYAKTLINDLVELLKASTDEATLNTAIARTATKDHKPRNVSGAEFQTGEPIFI
+
+C0HJR0     LHAKHPSDFGADAQGAMSKALELFRNDMAAQYKVLGFQG
+           ::::*:::::*: *::*:*:*:::::::*:*:       
+P80722     KYFSHVLTTPAN-QAFMEKLLTKIFTGVAGQL-------

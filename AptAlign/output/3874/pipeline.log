@@ -1,0 +1,1745 @@
++ export HOME=/var/www/.tcoffee_tmp
++ HOME=/var/www/.tcoffee_tmp
++ export HOME_4_TCOFFEE=/var/www/.tcoffee_tmp
++ HOME_4_TCOFFEE=/var/www/.tcoffee_tmp
++ export TMP=/var/www/.tcoffee_tmp
++ TMP=/var/www/.tcoffee_tmp
++ export TEMP=/var/www/.tcoffee_tmp
++ TEMP=/var/www/.tcoffee_tmp
++ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/snap/bin:/home/raza/Downloads/T-COFFEE_distribution_Version_13.46.1.b8b01e06/bin/linux
++ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/snap/bin:/home/raza/Downloads/T-COFFEE_distribution_Version_13.46.1.b8b01e06/bin/linux
++ echo 'Using HOME: /var/www/.tcoffee_tmp'
+Using HOME: /var/www/.tcoffee_tmp
++ FASTA_FILE=output/3874/input_sequence.fasta
++ mkdir -p output/3874
++ '[' '!' -f output/3874/input_sequence.fasta ']'
++ echo 'Input file found: output/3874/input_sequence.fasta'
+Input file found: output/3874/input_sequence.fasta
++ ls -l output/3874/input_sequence.fasta
+-rw-r--r-- 1 www-data www-data 321 Apr 25 21:56 output/3874/input_sequence.fasta
++ cat output/3874/input_sequence.fasta
+>C0HJR0
+MGLSDGEWQLVLNAWGKVEADVAGHGQEVLIRLFTGHPETLEKFDKFKHLKTEAEMKASEDLKKHGNTVLTALGGILKKKGHHEAEVKHLAESHANKHKIPVKYLEFISDAIIHVLHAKHPSDFGADAQGAMSKALELFRNDMAAQYKVLGFQG
+>P80722
+MVLTKDEFDSLLHELDPKIDTEEHRMELGLGAYTELFAAHPEYIKKFSRLQEATPANVMAQDGAKYYAKTLINDLVELLKASTDEATLNTAIARTATKDHKPRNVSGAEFQTGEPIFIKYFSHVLTTPANQAFMEKLLTKIFTGVAGQL
++ cp output/3874/input_sequence.fasta output/3874/seq.fasta
++ awk '
+BEGIN { seq_num = 0; filename = "" }
+function normalize_id(id) {
+    len = length(id)
+    if (len < 6) {
+        for (i = len + 1; i <= 6; i++) id = id "X"
+        return id
+    } else {
+        return substr(id, 1, 6)
+    }
+}
+/^>/ {
+    seq_num++
+    if (seq_num == 1) filename = "output/3874/seq1.fasta"
+    else if (seq_num == 2) filename = "output/3874/seq2.fasta"
+    split($0, parts, " ")
+    orig_id = substr(parts[1], 2)
+    new_id = normalize_id(orig_id)
+    print ">" new_id > filename
+    next
+}
+seq_num <= 2 { print > filename }
+' output/3874/input_sequence.fasta
++ cat output/3874/seq1.fasta
+>C0HJR0
+MGLSDGEWQLVLNAWGKVEADVAGHGQEVLIRLFTGHPETLEKFDKFKHLKTEAEMKASEDLKKHGNTVLTALGGILKKKGHHEAEVKHLAESHANKHKIPVKYLEFISDAIIHVLHAKHPSDFGADAQGAMSKALELFRNDMAAQYKVLGFQG
++ cat output/3874/seq2.fasta
+>P80722
+MVLTKDEFDSLLHELDPKIDTEEHRMELGLGAYTELFAAHPEYIKKFSRLQEATPANVMAQDGAKYYAKTLINDLVELLKASTDEATLNTAIARTATKDHKPRNVSGAEFQTGEPIFIKYFSHVLTTPANQAFMEKLLTKIFTGVAGQL
+++ awk '/^>/ {if (NR>1) exit} !/^>/ {total += length($0)} END {print total}' output/3874/seq.fasta
++ seq1_length=154
+++ awk 'BEGIN {flag=0} /^>/ {if (flag==1) exit} flag {total += length($0)} /^>/ && flag==0 {flag=1} END {print total}' output/3874/seq.fasta
++ seq2_length=154
++ min_length=104
++ max_length=204
++ seq_ids=($(grep '^>' "$OUTPUT_DIR/seq.fasta" | sed 's/>//'))
+++ grep '^>' output/3874/seq.fasta
+++ sed 's/>//'
++ psiblast -query output/3874/seq1.fasta -db /var/www/html/AptAlign/swissprot1/swissprot -num_iterations 3 -out output/3874/results_swissprot1.txt -outfmt 6
+Warning: [psiblast] Query_1 C0HJR0: Composition-based score adjustment conditioned on sequence properties and unconditional composition-based score adjustment is not supported with PSSMs, resetting to default value of standard composition-based statistics 
++ psiblast -query output/3874/seq2.fasta -db /var/www/html/AptAlign/swissprot1/swissprot -num_iterations 3 -out output/3874/results_swissprot2.txt -outfmt 6
+Warning: [psiblast] Query_1 P80722: Composition-based score adjustment conditioned on sequence properties and unconditional composition-based score adjustment is not supported with PSSMs, resetting to default value of standard composition-based statistics 
++ for file in "$OUTPUT_DIR/results_swissprot1.txt" "$OUTPUT_DIR/results_swissprot2.txt"
++ head -n 70
++ awk -v id1=C0HJR0 -v id2=P80722 '
+    NR > 1 {
+        percent_identity = substr($0, 17, 2) + 0
+        id = substr($0, 8, 6)
+        if (id == id1 || id == id2) next
+        if (percent_identity >= 80) print id, percent_identity
++ read -r id percent
+        else if (percent_identity >= 60) print id, percent_identity
+        else if (percent_identity >= 40) print id, percent_identity
+        else if (percent_identity < 30) print id, percent_identity
+    }' output/3874/results_swissprot1.txt
++ echo 'Downloading: P02191 (99)'
+Downloading: P02191 (99)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02191.fasta
+awk: write failure (Broken pipe)
+awk: close failed on file "/dev/stdout" (Broken pipe)
++ read -r id percent
++ echo 'Downloading: P02192 (98)'
+Downloading: P02192 (98)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02192.fasta
++ read -r id percent
++ echo 'Downloading: B7U9B5 (98)'
+Downloading: B7U9B5 (98)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/B7U9B5.fasta
++ read -r id percent
++ echo 'Downloading: P84997 (96)'
+Downloading: P84997 (96)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P84997.fasta
++ read -r id percent
++ echo 'Downloading: P68082 (89)'
+Downloading: P68082 (89)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P68082.fasta
++ read -r id percent
++ echo 'Downloading: P02189 (89)'
+Downloading: P02189 (89)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02189.fasta
++ read -r id percent
++ echo 'Downloading: P02165 (88)'
+Downloading: P02165 (88)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02165.fasta
++ read -r id percent
++ echo 'Downloading: R9RZK8 (88)'
+Downloading: R9RZK8 (88)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/R9RZK8.fasta
++ read -r id percent
++ echo 'Downloading: P02170 (88)'
+Downloading: P02170 (88)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02170.fasta
++ read -r id percent
++ echo 'Downloading: P02169 (87)'
+Downloading: P02169 (87)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02169.fasta
++ read -r id percent
++ echo 'Downloading: P02178 (86)'
+Downloading: P02178 (86)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02178.fasta
++ read -r id percent
++ echo 'Downloading: P02181 (87)'
+Downloading: P02181 (87)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02181.fasta
++ read -r id percent
++ echo 'Downloading: P02177 (86)'
+Downloading: P02177 (86)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02177.fasta
++ read -r id percent
++ echo 'Downloading: P02145 (86)'
+Downloading: P02145 (86)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02145.fasta
++ read -r id percent
++ echo 'Downloading: P02174 (85)'
+Downloading: P02174 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02174.fasta
++ read -r id percent
++ echo 'Downloading: P11343 (85)'
+Downloading: P11343 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P11343.fasta
++ read -r id percent
++ echo 'Downloading: P02147 (85)'
+Downloading: P02147 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02147.fasta
++ read -r id percent
++ echo 'Downloading: P68277 (85)'
+Downloading: P68277 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P68277.fasta
++ read -r id percent
++ echo 'Downloading: P68276 (85)'
+Downloading: P68276 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P68276.fasta
++ read -r id percent
++ echo 'Downloading: P02166 (86)'
+Downloading: P02166 (86)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02166.fasta
++ read -r id percent
++ echo 'Downloading: P02144 (85)'
+Downloading: P02144 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02144.fasta
++ read -r id percent
++ echo 'Downloading: P68084 (85)'
+Downloading: P68084 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P68084.fasta
++ read -r id percent
++ echo 'Downloading: P02173 (84)'
+Downloading: P02173 (84)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02173.fasta
++ read -r id percent
++ echo 'Downloading: P02151 (87)'
+Downloading: P02151 (87)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02151.fasta
++ read -r id percent
++ echo 'Downloading: P02171 (85)'
+Downloading: P02171 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02171.fasta
++ read -r id percent
++ echo 'Downloading: P02150 (85)'
+Downloading: P02150 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02150.fasta
++ read -r id percent
++ echo 'Downloading: P02179 (85)'
+Downloading: P02179 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02179.fasta
++ read -r id percent
++ echo 'Downloading: P02183 (85)'
+Downloading: P02183 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02183.fasta
++ read -r id percent
++ echo 'Downloading: P02167 (86)'
+Downloading: P02167 (86)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02167.fasta
++ read -r id percent
++ echo 'Downloading: P02152 (86)'
+Downloading: P02152 (86)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02152.fasta
++ read -r id percent
++ echo 'Downloading: P20856 (85)'
+Downloading: P20856 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P20856.fasta
++ read -r id percent
++ echo 'Downloading: P02148 (85)'
+Downloading: P02148 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02148.fasta
++ read -r id percent
++ echo 'Downloading: P62734 (85)'
+Downloading: P62734 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P62734.fasta
++ read -r id percent
++ echo 'Downloading: Q0KIY9 (84)'
+Downloading: Q0KIY9 (84)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q0KIY9.fasta
++ read -r id percent
++ echo 'Downloading: P02153 (85)'
+Downloading: P02153 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02153.fasta
++ read -r id percent
++ echo 'Downloading: P02180 (84)'
+Downloading: P02180 (84)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02180.fasta
++ read -r id percent
++ echo 'Downloading: P02163 (85)'
+Downloading: P02163 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02163.fasta
++ read -r id percent
++ echo 'Downloading: Q0KIY6 (83)'
+Downloading: Q0KIY6 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q0KIY6.fasta
++ read -r id percent
++ echo 'Downloading: P02182 (83)'
+Downloading: P02182 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02182.fasta
++ read -r id percent
++ echo 'Downloading: P02157 (85)'
+Downloading: P02157 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02157.fasta
++ read -r id percent
++ echo 'Downloading: P32428 (82)'
+Downloading: P32428 (82)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P32428.fasta
++ read -r id percent
++ echo 'Downloading: Q0KIY3 (83)'
+Downloading: Q0KIY3 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q0KIY3.fasta
++ read -r id percent
++ echo 'Downloading: P02186 (83)'
+Downloading: P02186 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02186.fasta
++ read -r id percent
++ echo 'Downloading: P02164 (83)'
+Downloading: P02164 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02164.fasta
++ read -r id percent
++ echo 'Downloading: P04248 (83)'
+Downloading: P04248 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P04248.fasta
++ read -r id percent
++ echo 'Downloading: P02155 (85)'
+Downloading: P02155 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02155.fasta
++ read -r id percent
++ echo 'Downloading: P02154 (85)'
+Downloading: P02154 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02154.fasta
++ read -r id percent
++ echo 'Downloading: C0HJQ9 (83)'
+Downloading: C0HJQ9 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/C0HJQ9.fasta
++ read -r id percent
++ echo 'Downloading: P02187 (83)'
+Downloading: P02187 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02187.fasta
++ read -r id percent
++ echo 'Downloading: Q6PL31 (84)'
+Downloading: Q6PL31 (84)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q6PL31.fasta
++ read -r id percent
++ echo 'Downloading: P02156 (84)'
+Downloading: P02156 (84)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02156.fasta
++ read -r id percent
++ echo 'Downloading: P04250 (83)'
+Downloading: P04250 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P04250.fasta
++ read -r id percent
++ echo 'Downloading: P14396 (83)'
+Downloading: P14396 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P14396.fasta
++ read -r id percent
++ echo 'Downloading: P04249 (83)'
+Downloading: P04249 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P04249.fasta
++ read -r id percent
++ echo 'Downloading: P68080 (82)'
+Downloading: P68080 (82)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P68080.fasta
++ read -r id percent
++ echo 'Downloading: C0HKB7 (85)'
+Downloading: C0HKB7 (85)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/C0HKB7.fasta
++ read -r id percent
++ echo 'Downloading: P02161 (83)'
+Downloading: P02161 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02161.fasta
++ read -r id percent
++ echo 'Downloading: P02185 (82)'
+Downloading: P02185 (82)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02185.fasta
++ read -r id percent
++ echo 'Downloading: P02168 (84)'
+Downloading: P02168 (84)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02168.fasta
++ read -r id percent
++ echo 'Downloading: P02184 (81)'
+Downloading: P02184 (81)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02184.fasta
++ read -r id percent
++ echo 'Downloading: P02193 (83)'
+Downloading: P02193 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02193.fasta
++ read -r id percent
++ echo 'Downloading: P02160 (83)'
+Downloading: P02160 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02160.fasta
++ read -r id percent
++ echo 'Downloading: P63113 (83)'
+Downloading: P63113 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P63113.fasta
++ read -r id percent
++ echo 'Downloading: P02159 (83)'
+Downloading: P02159 (83)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02159.fasta
++ read -r id percent
++ echo 'Downloading: P30562 (80)'
+Downloading: P30562 (80)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P30562.fasta
++ read -r id percent
++ echo 'Downloading: Q9QZ76 (79)'
+Downloading: Q9QZ76 (79)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9QZ76.fasta
++ read -r id percent
++ echo 'Downloading: P02194 (80)'
+Downloading: P02194 (80)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02194.fasta
++ read -r id percent
++ echo 'Downloading: P02195 (79)'
+Downloading: P02195 (79)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02195.fasta
++ read -r id percent
++ echo 'Downloading: P04247 (79)'
+Downloading: P04247 (79)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P04247.fasta
++ read -r id percent
++ echo 'Downloading: P83682 (79)'
+Downloading: P83682 (79)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P83682.fasta
++ read -r id percent
++ for file in "$OUTPUT_DIR/results_swissprot1.txt" "$OUTPUT_DIR/results_swissprot2.txt"
++ awk -v id1=C0HJR0 -v id2=P80722 '
+    NR > 1 {
+        percent_identity = substr($0, 17, 2) + 0
+        id = substr($0, 8, 6)
+        if (id == id1 || id == id2) next
+        if (percent_identity >= 80) print id, percent_identity
+        else if (percent_identity >= 60) print id, percent_identity
+        else if (percent_identity >= 40) print id, percent_identity
+        else if (percent_identity < 30) print id, percent_identity
+    }' output/3874/results_swissprot2.txt
++ head -n 70
++ read -r id percent
++ echo 'Downloading: P80721 (45)'
+Downloading: P80721 (45)
+awk: close failed on file "/dev/stdout"+ wget -q -O - https://rest.uniprot.org/uniprotkb/P80721.fasta
+ (Broken pipe)
++ read -r id percent
++ echo 'Downloading: P68189 (29)'
+Downloading: P68189 (29)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P68189.fasta
++ read -r id percent
++ echo 'Downloading: P02205 (29)'
+Downloading: P02205 (29)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02205.fasta
++ read -r id percent
++ echo 'Downloading: Q9DEP1 (29)'
+Downloading: Q9DEP1 (29)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DEP1.fasta
++ read -r id percent
++ echo 'Downloading: Q9DEN8 (29)'
+Downloading: Q9DEN8 (29)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DEN8.fasta
++ read -r id percent
++ echo 'Downloading: P87497 (29)'
+Downloading: P87497 (29)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P87497.fasta
++ read -r id percent
++ echo 'Downloading: Q9DEN9 (29)'
+Downloading: Q9DEN9 (29)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DEN9.fasta
++ read -r id percent
++ echo 'Downloading: P02214 (22)'
+Downloading: P02214 (22)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02214.fasta
++ read -r id percent
++ echo 'Downloading: Q9DGJ2 (28)'
+Downloading: Q9DGJ2 (28)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DGJ2.fasta
++ read -r id percent
++ echo 'Downloading: Q7M424 (22)'
+Downloading: Q7M424 (22)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q7M424.fasta
++ read -r id percent
++ echo 'Downloading: Q9DEP0 (26)'
+Downloading: Q9DEP0 (26)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DEP0.fasta
++ read -r id percent
++ echo 'Downloading: Q7T044 (26)'
+Downloading: Q7T044 (26)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q7T044.fasta
++ read -r id percent
++ echo 'Downloading: P84298 (25)'
+Downloading: P84298 (25)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P84298.fasta
++ read -r id percent
++ echo 'Downloading: Q9DGJ0 (29)'
+Downloading: Q9DGJ0 (29)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DGJ0.fasta
++ read -r id percent
++ echo 'Downloading: P12549 (25)'
+Downloading: P12549 (25)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P12549.fasta
++ read -r id percent
++ echo 'Downloading: Q23762 (25)'
+Downloading: Q23762 (25)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q23762.fasta
++ read -r id percent
++ echo 'Downloading: Q6AXQ4 (41)'
+Downloading: Q6AXQ4 (41)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q6AXQ4.fasta
++ read -r id percent
++ echo 'Downloading: Q23763 (25)'
+Downloading: Q23763 (25)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q23763.fasta
++ read -r id percent
++ echo 'Downloading: P12548 (25)'
+Downloading: P12548 (25)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P12548.fasta
++ read -r id percent
++ echo 'Downloading: Q6VN46 (27)'
+Downloading: Q6VN46 (27)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q6VN46.fasta
++ read -r id percent
++ echo 'Downloading: Q9DGJ1 (29)'
+Downloading: Q9DGJ1 (29)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DGJ1.fasta
++ read -r id percent
++ echo 'Downloading: Q9DGI9 (24)'
+Downloading: Q9DGI9 (24)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DGI9.fasta
++ read -r id percent
++ echo 'Downloading: P02167 (28)'
+Downloading: P02167 (28)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02167.fasta
++ read -r id percent
++ echo 'Downloading: P12550 (26)'
+Downloading: P12550 (26)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P12550.fasta
++ read -r id percent
++ echo 'Downloading: P29242 (26)'
+Downloading: P29242 (26)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P29242.fasta
++ read -r id percent
++ echo 'Downloading: Q6I7B0 (24)'
+Downloading: Q6I7B0 (24)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q6I7B0.fasta
++ read -r id percent
++ echo 'Downloading: P18966 (24)'
+Downloading: P18966 (24)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P18966.fasta
++ read -r id percent
++ echo 'Downloading: Q7LZM3 (28)'
+Downloading: Q7LZM3 (28)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q7LZM3.fasta
++ read -r id percent
++ echo 'Downloading: Q7M416 (21)'
+Downloading: Q7M416 (21)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q7M416.fasta
++ read -r id percent
++ echo 'Downloading: P02166 (26)'
+Downloading: P02166 (26)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02166.fasta
++ read -r id percent
++ echo 'Downloading: P29243 (23)'
+Downloading: P29243 (23)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P29243.fasta
++ read -r id percent
++ echo 'Downloading: Q9DCV4 (29)'
+Downloading: Q9DCV4 (29)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DCV4.fasta
++ read -r id percent
++ echo 'Downloading: P84296 (24)'
+Downloading: P84296 (24)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P84296.fasta
++ read -r id percent
++ echo 'Downloading: P02184 (29)'
+Downloading: P02184 (29)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02184.fasta
++ read -r id percent
++ echo 'Downloading: Q8T7J9 (20)'
+Downloading: Q8T7J9 (20)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q8T7J9.fasta
++ read -r id percent
++ echo 'Downloading: O51627 (26)'
+Downloading: O51627 (26)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/O51627.fasta
++ read -r id percent
++ echo 'Downloading: Q7LZM5 (25)'
+Downloading: Q7LZM5 (25)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q7LZM5.fasta
++ read -r id percent
++ echo 'Downloading: Q7LZM4 (25)'
+Downloading: Q7LZM4 (25)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q7LZM4.fasta
++ read -r id percent
++ echo 'Downloading: P80721 (45)'
+Downloading: P80721 (45)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P80721.fasta
++ read -r id percent
++ echo 'Downloading: P12549 (24)'
+Downloading: P12549 (24)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P12549.fasta
++ read -r id percent
++ echo 'Downloading: Q23762 (25)'
+Downloading: Q23762 (25)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q23762.fasta
++ read -r id percent
++ echo 'Downloading: P19363 (19)'
+Downloading: P19363 (19)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P19363.fasta
++ read -r id percent
++ echo 'Downloading: P84298 (25)'
+Downloading: P84298 (25)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P84298.fasta
++ read -r id percent
++ echo 'Downloading: P09965 (18)'
+Downloading: P09965 (18)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P09965.fasta
++ read -r id percent
++ echo 'Downloading: P87497 (22)'
+Downloading: P87497 (22)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P87497.fasta
++ read -r id percent
++ echo 'Downloading: Q9DGI9 (19)'
+Downloading: Q9DGI9 (19)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DGI9.fasta
++ read -r id percent
++ echo 'Downloading: Q9DEN9 (21)'
+Downloading: Q9DEN9 (21)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DEN9.fasta
++ read -r id percent
++ echo 'Downloading: P02167 (25)'
+Downloading: P02167 (25)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02167.fasta
++ read -r id percent
++ echo 'Downloading: Q7T044 (21)'
+Downloading: Q7T044 (21)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q7T044.fasta
++ read -r id percent
++ echo 'Downloading: P18966 (24)'
+Downloading: P18966 (24)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P18966.fasta
++ read -r id percent
++ echo 'Downloading: Q23763 (24)'
+Downloading: Q23763 (24)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q23763.fasta
++ read -r id percent
++ echo 'Downloading: Q9DEP0 (21)'
+Downloading: Q9DEP0 (21)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DEP0.fasta
++ read -r id percent
++ echo 'Downloading: Q9DEN8 (22)'
+Downloading: Q9DEN8 (22)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DEN8.fasta
++ read -r id percent
++ echo 'Downloading: P12548 (24)'
+Downloading: P12548 (24)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P12548.fasta
++ read -r id percent
++ echo 'Downloading: Q6I7B0 (23)'
+Downloading: Q6I7B0 (23)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q6I7B0.fasta
++ read -r id percent
++ echo 'Downloading: Q9DEP1 (21)'
+Downloading: Q9DEP1 (21)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DEP1.fasta
++ read -r id percent
++ echo 'Downloading: P29287 (18)'
+Downloading: P29287 (18)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P29287.fasta
++ read -r id percent
++ echo 'Downloading: Q9DGJ1 (22)'
+Downloading: Q9DGJ1 (22)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q9DGJ1.fasta
++ read -r id percent
++ echo 'Downloading: Q7LZM3 (26)'
+Downloading: Q7LZM3 (26)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q7LZM3.fasta
++ read -r id percent
++ echo 'Downloading: Q7M424 (23)'
+Downloading: Q7M424 (23)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/Q7M424.fasta
++ read -r id percent
++ echo 'Downloading: P02166 (24)'
+Downloading: P02166 (24)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02166.fasta
++ read -r id percent
++ echo 'Downloading: O76242 (25)'
+Downloading: O76242 (25)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/O76242.fasta
++ read -r id percent
++ echo 'Downloading: P29242 (22)'
+Downloading: P29242 (22)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P29242.fasta
++ read -r id percent
++ echo 'Downloading: P84296 (23)'
+Downloading: P84296 (23)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P84296.fasta
++ read -r id percent
++ echo 'Downloading: P12550 (22)'
+Downloading: P12550 (22)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P12550.fasta
++ read -r id percent
++ echo 'Downloading: P02224 (20)'
+Downloading: P02224 (20)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02224.fasta
++ read -r id percent
++ echo 'Downloading: P02192 (26)'
+Downloading: P02192 (26)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02192.fasta
++ read -r id percent
++ echo 'Downloading: P02169 (22)'
+Downloading: P02169 (22)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02169.fasta
++ read -r id percent
++ echo 'Downloading: P84997 (26)'
+Downloading: P84997 (26)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P84997.fasta
++ read -r id percent
++ echo 'Downloading: P02191 (25)'
+Downloading: P02191 (25)
++ wget -q -O - https://rest.uniprot.org/uniprotkb/P02191.fasta
++ read -r id percent
++ awk -v min_len=104 -v max_len=204 '
+/^>/ {
+    if (seq) {
+        if (length(seq) >= min_len && length(seq) <= max_len && !seen[id]) {
+            print id; print seq;
+            seen[id] = 1;
+        }
+    }
+    id = $0; seq = "";
+    next;
+}
+{ seq = seq $0 }
+END {
+    if (length(seq) >= min_len && length(seq) <= max_len && !seen[id]) {
+        print id; print seq;
+    }
+}' output/3874/pssm.fasta
++ mv output/3874/pssm_filtered.fasta output/3874/pssm.fasta
++ awk '/^>/ {if (!seen[$0]++) {print; p=1} else p=0} !/^>/ && p' output/3874/pssm.fasta
++ mv output/3874/cleaned.fasta output/3874/pssm.fasta
++ sed -i 's/[@|%]//g' output/3874/pssm.fasta
++ sed -i -E 's/^(>........).*/\1/' output/3874/pssm.fasta
++ sed -i 's/[@|%]//g' output/3874/seq.fasta
++ awk -v id1=C0HJR0 -v id2=P80722 '
+BEGIN { delete_seq = 0 }
+{
+    if ($0 ~ "^>") {
+        delete_seq = ($0 == ">" id1 || $0 == ">" id2) ? 1 : 0
+    }
+    if (!delete_seq) print $0
+}' output/3874/pssm.fasta
++ mv output/3874/temp.fasta output/3874/pssm.fasta
++ t_coffee -seq output/3874/pssm.fasta -outfile output/3874/pssm.aln -run_name output/3874/pssm
+
+PROGRAM: T-COFFEE Version_13.46.1.b8b01e06 (2024-06-07 10:18:23 - Revision 114dbc01 - Build 1078)
+-full_log      	S	[0] 
+-genepred_score	S	[0] 	nsd
+-run_name      	S	[1] 	output/3874/pssm
+-mem_mode      	S	[0] 	mem
+-extend        	D	[1] 	1 
+-extend_mode   	S	[0] 	very_fast_triplet
+-max_n_pair    	D	[0] 	10 
+-seq_name_for_quadruplet	S	[0] 	all
+-compact       	S	[0] 	default
+-clean         	S	[0] 	no
+-do_self       	FL	[0] 	0
+-do_normalise  	D	[0] 	1000 
+-template_file 	S	[0] 
+-template_dir_E_	S	[0] 	./
+-setenv        	S	[0] 	0
+-export        	S	[0] 	0
+-template_mode 	S	[0] 
+-flip          	D	[0] 	0 
+-remove_template_file	D	[0] 	0 
+-profile_template_file	S	[0] 
+-in            	S	[0] 
+-seq           	S	[1] 	output/3874/pssm.fasta
+-aln           	S	[0] 
+-method_limits 	S	[0] 
+-method        	S	[0] 
+-lib           	S	[0] 
+-profile       	S	[0] 
+-profile1      	S	[0] 
+-profile2      	S	[0] 
+-pdb           	S	[0] 
+-relax_lib     	D	[0] 	1 
+-filter_lib    	D	[0] 	0 
+-shrink_lib    	D	[0] 	0 
+-out_lib       	W_F	[0] 	no
+-out_lib_mode  	S	[0] 	primary
+-lib_only      	D	[0] 	0 
+-outseqweight  	W_F	[0] 	no
+-seq_source    	S	[0] 	ANY
+-cosmetic_penalty	D	[0] 	0 
+-gapopen       	D	[0] 	0 
+-gapext        	D	[0] 	0 
+-fgapopen      	D	[0] 	0 
+-fgapext       	D	[0] 	0 
+-nomatch       	D	[0] 	0 
+-newtree       	W_F	[0] 	default
+-tree          	W_F	[0] 	NO
+-usetree       	R_F	[0] 
+-tree_mode     	S	[0] 	nj
+-distance_matrix_mode	S	[0] 	ktup
+-distance_matrix_sim_mode	S	[0] 	idmat_sim1
+-quicktree     	FL	[0] 	0
+-outfile       	W_F	[1] 	output/3874/pssm.aln
+-maximise      	FL	[1] 	1
+-output        	S	[0] 	aln	html
+-len           	D	[0] 	0 
+-infile        	R_F	[0] 
+-matrix        	S	[0] 	default
+-fs_matrix     	S	[0] 	idmat
+-fs_gop        	D	[0] 	1 
+-fs_gep        	D	[0] 	1 
+-tg_mode       	D	[0] 	1 
+-profile_mode  	S	[0] 	cw_profile_profile
+-profile_comparison	S	[0] 	profile
+-dp_mode       	S	[0] 	linked_pair_wise
+-ktuple        	D	[0] 	1 
+-ndiag         	D	[0] 	0 
+-diag_threshold	D	[0] 	0 
+-diag_mode     	D	[0] 	0 
+-sim_matrix    	S	[0] 	vasiliky
+-transform     	S	[0] 
+-extend_seq    	FL	[0] 	0
+-outorder      	S	[0] 	input
+-inorder       	S	[0] 	aligned
+-seqnos        	S	[0] 	off
+-case          	S	[0] 	keep
+-cpu           	D	[0] 	0 
+-ulimit        	D	[0] 	-1 
+-maxnseq       	D	[0] 	-1 
+-maxlen        	D	[0] 	-1 
+-sample_dp     	D	[0] 	0 
+-weight        	S	[0] 	default
+-seq_weight    	S	[0] 	no
+-align         	FL	[1] 	1
+-mocca         	FL	[0] 	0
+-domain        	FL	[0] 	0
+-start         	D	[0] 	0 
+-len           	D	[0] 	0 
+-scale         	D	[0] 	0 
+-mocca_interactive	FL	[0] 	0
+-method_evaluate_mode	S	[0] 	default
+-color_mode    	S	[0] 	new
+-aln_line_length	D	[0] 	0 
+-evaluate_mode 	S	[0] 	triplet
+-get_type      	FL	[0] 	0
+-clean_aln     	D	[0] 	0 
+-clean_threshold	D	[1] 	1 
+-clean_iteration	D	[1] 	1 
+-clean_evaluate_mode	S	[0] 	t_coffee_fast
+-extend_matrix 	FL	[0] 	0
+-prot_min_sim  	D	[0] 	0 
+-prot_max_sim  	D	[100] 	100 
+-psiJ          	D	[0] 	3 
+-psitrim_mode  	S	[0] 	regtrim
+-psitrim_tree  	S	[0] 	codnd
+-psitrim       	D	[100] 	100 
+-prot_min_cov  	D	[90] 	90 
+-pdb_type      	S	[0] 	d
+-pdb_min_sim   	D	[35] 	35 
+-pdb_max_sim   	D	[100] 	100 
+-pdb_min_cov   	D	[50] 	50 
+-pdb_blast_server	W_F	[0] 	EBI
+-blast         	W_F	[0] 
+-blast_server  	W_F	[0] 	EBI
+-pdb_db        	W_F	[0] 	pdb
+-protein_db    	W_F	[0] 	uniref50
+-method_log    	W_F	[0] 	no
+-struc_to_use  	S	[0] 
+-cache         	W_F	[0] 	use
+-print_cache   	FL	[0] 	0
+-align_pdb_param_file	W_F	[0] 	no
+-align_pdb_hasch_mode	W_F	[0] 	hasch_ca_trace_bubble
+-external_aligner	S	[0] 	NO
+-msa_mode      	S	[0] 	tree
+-et_mode       	S	[0] 	et
+-master        	S	[0] 	no
+-blast_nseq    	D	[0] 	0 
+-lalign_n_top  	D	[0] 	10 
+-iterate       	D	[0] 	0 
+-trim          	D	[0] 	0 
+-split         	D	[0] 	0 
+-trimfile      	S	[0] 	default
+-split         	D	[0] 	0 
+-split_nseq_thres	D	[0] 	0 
+-split_score_thres	D	[0] 	0 
+-check_pdb_status	D	[0] 	0 
+-clean_seq_name	D	[0] 	0 
+-seq_to_keep   	S	[0] 
+-dpa_master_aln	S	[0] 
+-dpa_maxnseq   	D	[0] 	0 
+-dpa_min_score1	D	[0] 
+-dpa_min_score2	D	[0] 
+-dpa_keep_tmpfile	FL	[0] 	0
+-dpa_debug     	D	[0] 	0 
+-multi_core    	S	[0] 	templates_jobs_relax_msa_evaluate
+-n_core        	D	[0] 	1 
+-thread        	D	[0] 	1 
+-max_n_proc    	D	[0] 	1 
+-lib_list      	S	[0] 
+-prune_lib_mode	S	[0] 	5
+-tip           	S	[0] 	none
+-rna_lib       	S	[0] 
+-no_warning    	D	[0] 	0 
+-run_local_script	D	[0] 	0 
+-proxy         	S	[0] 	unset
+-email         	S	[0] 
+-clean_overaln 	D	[0] 	0 
+-overaln_param 	S	[0] 
+-overaln_mode  	S	[0] 
+-overaln_model 	S	[0] 
+-overaln_threshold	D	[0] 	0 
+-overaln_target	D	[0] 	0 
+-overaln_P1    	D	[0] 	0 
+-overaln_P2    	D	[0] 	0 
+-overaln_P3    	D	[0] 	0 
+-overaln_P4    	D	[0] 	0 
+-exon_boundaries	S	[0] 
+-display       	D	[0] 	100 
+
+INPUT FILES
+	Input File (S) output/3874/pssm.fasta  Format fasta_seq
+	Input File (M) proba_pair 
+
+Identify Master Sequences [no]:
+
+Master Sequences Identified
+INPUT SEQUENCES: 107 SEQUENCES  [PROTEIN]
+	Multi Core Mode (read): 1 processor(s):
+
+	--- Process Method/Library/Aln Soutput/3874/pssm.fasta
+	xxx Retrieved Soutput/3874/pssm.fasta
+	--- Process Method/Library/Aln Mproba_pair
+	xxx Retrieved Mproba_pair
+
+	All Methods Retrieved
+
+MANUAL PENALTIES: gapopen=0 gapext=0
+
+	Library Total Size: [3291890]
+
+Library Relaxation: Multi_proc [1]
+ 
+!		[Relax Library][TOT=  107][  0 %]!		[Relax Library][TOT=  107][  1 %]!		[Relax Library][TOT=  107][  2 %]!		[Relax Library][TOT=  107][  3 %]!		[Relax Library][TOT=  107][  4 %]!		[Relax Library][TOT=  107][  5 %]!		[Relax Library][TOT=  107][  6 %]!		[Relax Library][TOT=  107][  7 %]!		[Relax Library][TOT=  107][  8 %]!		[Relax Library][TOT=  107][  9 %]!		[Relax Library][TOT=  107][ 10 %]!		[Relax Library][TOT=  107][ 11 %]!		[Relax Library][TOT=  107][ 12 %]!		[Relax Library][TOT=  107][ 13 %]!		[Relax Library][TOT=  107][ 14 %]!		[Relax Library][TOT=  107][ 15 %]!		[Relax Library][TOT=  107][ 16 %][EST. REMAINING TIME:    5 sec.]!		[Relax Library][TOT=  107][ 17 %][EST. REMAINING TIME:    4 sec.]!		[Relax Library][TOT=  107][ 18 %][EST. REMAINING TIME:    4 sec.]!		[Relax Library][TOT=  107][ 19 %][EST. REMAINING TIME:    4 sec.]!		[Relax Library][TOT=  107][ 20 %][EST. REMAINING TIME:    4 sec.]!		[Relax Library][TOT=  107][ 21 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 22 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 23 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 24 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 25 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 26 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 27 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 28 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 29 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 30 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 31 %][EST. REMAINING TIME:    4 sec.]!		[Relax Library][TOT=  107][ 32 %][EST. REMAINING TIME:    4 sec.]!		[Relax Library][TOT=  107][ 33 %][EST. REMAINING TIME:    4 sec.]!		[Relax Library][TOT=  107][ 34 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 35 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 36 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 37 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 38 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 39 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 40 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 41 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 42 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 43 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 44 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 45 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 46 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 47 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 48 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 49 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 50 %][EST. REMAINING TIME:    3 sec.]!		[Relax Library][TOT=  107][ 51 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 52 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 53 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 54 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 55 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 56 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 57 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 58 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 59 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 60 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 61 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 62 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 63 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 64 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 65 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 66 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 67 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 68 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 69 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 70 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 71 %][EST. REMAINING TIME:    2 sec.]!		[Relax Library][TOT=  107][ 72 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 73 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 74 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 75 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 76 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 77 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 78 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 79 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 80 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 81 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 82 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 83 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 84 %]!		[Relax Library][TOT=  107][ 85 %][EST. REMAINING TIME:    1 sec.]!		[Relax Library][TOT=  107][ 86 %]!		[Relax Library][TOT=  107][ 87 %]!		[Relax Library][TOT=  107][ 88 %]!		[Relax Library][TOT=  107][ 89 %]!		[Relax Library][TOT=  107][ 90 %]!		[Relax Library][TOT=  107][ 91 %]!		[Relax Library][TOT=  107][ 92 %]!		[Relax Library][TOT=  107][ 93 %]!		[Relax Library][TOT=  107][ 94 %]!		[Relax Library][TOT=  107][ 95 %]!		[Relax Library][TOT=  107][ 96 %]!		[Relax Library][TOT=  107][ 97 %]!		[Relax Library][TOT=  107][ 98 %]!		[Relax Library][TOT=  107][ 99 %]!		[Relax Library][TOT=  107][100 %][ ELAPSED  TIME:    7 sec.]
+
+Relaxation Summary: [3291890]--->[2811512]
+
+
+
+UN-WEIGHTED MODE: EVERY SEQUENCE WEIGHTS 1
+
+MAKE GUIDE TREE 
+	[MODE=nj][DONE]
+
+PROGRESSIVE_ALIGNMENT [Tree Based]
+
+#Single Thread
+	Group  108: [Group   53 (   1 seq)] with [Group    2 (   1 seq)]-->[Len=  154][PID:27595]	Group  109: [Group   54 (   1 seq)] with [Group  108 (   2 seq)]-->[Len=  154][PID:27595]	Group  110: [Group   21 (   1 seq)] with [Group  109 (   3 seq)]-->[Len=  154][PID:27595]	Group  111: [Group   63 (   1 seq)] with [Group   45 (   1 seq)]-->[Len=  154][PID:27595]	Group  112: [Group  111 (   2 seq)] with [Group  110 (   4 seq)]-->[Len=  154][PID:27595]	Group  113: [Group   20 (   1 seq)] with [Group  112 (   6 seq)]-->[Len=  154][PID:27595]	Group  114: [Group   22 (   1 seq)] with [Group  113 (   7 seq)]-->[Len=  154][PID:27595]	Group  115: [Group   15 (   1 seq)] with [Group    3 (   1 seq)]-->[Len=  154][PID:27595]	Group  116: [Group   89 (   1 seq)] with [Group   28 (   1 seq)]-->[Len=  154][PID:27595]	Group  117: [Group   52 (   1 seq)] with [Group  116 (   2 seq)]-->[Len=  154][PID:27595]	Group  118: [Group  106 (   1 seq)] with [Group   51 (   1 seq)]-->[Len=  154][PID:27595]	Group  119: [Group  118 (   2 seq)] with [Group  117 (   3 seq)]-->[Len=  154][PID:27595]	Group  120: [Group  119 (   5 seq)] with [Group  115 (   2 seq)]-->[Len=  154][PID:27595]	Group  121: [Group  120 (   7 seq)] with [Group  114 (   8 seq)]-->[Len=  154][PID:27595]	Group  122: [Group   42 (   1 seq)] with [Group  121 (  15 seq)]-->[Len=  154][PID:27595]	Group  123: [Group   56 (   1 seq)] with [Group   16 (   1 seq)]-->[Len=  154][PID:27595]	Group  124: [Group   70 (   1 seq)] with [Group   18 (   1 seq)]-->[Len=  154][PID:27595]	Group  125: [Group  124 (   2 seq)] with [Group   17 (   1 seq)]-->[Len=  154][PID:27595]	Group  126: [Group  125 (   3 seq)] with [Group  123 (   2 seq)]-->[Len=  154][PID:27595]	Group  127: [Group  126 (   5 seq)] with [Group  122 (  16 seq)]-->[Len=  154][PID:27595]	Group  128: [Group   68 (   1 seq)] with [Group   19 (   1 seq)]-->[Len=  154][PID:27595]	Group  129: [Group   47 (   1 seq)] with [Group  128 (   2 seq)]-->[Len=  154][PID:27595]	Group  130: [Group  129 (   3 seq)] with [Group  127 (  21 seq)]-->[Len=  154][PID:27595]	Group  131: [Group   44 (   1 seq)] with [Group   43 (   1 seq)]-->[Len=  154][PID:27595]	Group  132: [Group   81 (   1 seq)] with [Group  131 (   2 seq)]-->[Len=  154][PID:27595]	Group  133: [Group  132 (   3 seq)] with [Group    1 (   1 seq)]-->[Len=  154][PID:27595]	Group  134: [Group   72 (   1 seq)] with [Group  133 (   4 seq)]-->[Len=  154][PID:27595]	Group  135: [Group   27 (   1 seq)] with [Group  134 (   5 seq)]-->[Len=  154][PID:27595]	Group  136: [Group   71 (   1 seq)] with [Group   67 (   1 seq)]-->[Len=  154][PID:27595]	Group  137: [Group  136 (   2 seq)] with [Group  135 (   6 seq)]-->[Len=  154][PID:27595]	Group  138: [Group   30 (   1 seq)] with [Group   35 (   1 seq)]-->[Len=  154][PID:27595]	Group  139: [Group   29 (   1 seq)] with [Group  138 (   2 seq)]-->[Len=  154][PID:27595]	Group  140: [Group   84 (   1 seq)] with [Group  139 (   3 seq)]-->[Len=  154][PID:27595]	Group  141: [Group   76 (   1 seq)] with [Group  140 (   4 seq)]-->[Len=  154][PID:27595]	Group  142: [Group   75 (   1 seq)] with [Group  141 (   5 seq)]-->[Len=  154][PID:27595]	Group  143: [Group   83 (   1 seq)] with [Group  142 (   6 seq)]-->[Len=  154][PID:27595]	Group  144: [Group  107 (   1 seq)] with [Group   31 (   1 seq)]-->[Len=  154][PID:27595]	Group  145: [Group   32 (   1 seq)] with [Group  144 (   2 seq)]-->[Len=  154][PID:27595]	Group  146: [Group   34 (   1 seq)] with [Group   33 (   1 seq)]-->[Len=  154][PID:27595]	Group  147: [Group  146 (   2 seq)] with [Group  145 (   3 seq)]-->[Len=  154][PID:27595]	Group  148: [Group  147 (   5 seq)] with [Group  143 (   7 seq)]-->[Len=  154][PID:27595]	Group  149: [Group   78 (   1 seq)] with [Group  148 (  12 seq)]-->[Len=  154][PID:27595]	Group  150: [Group   37 (   1 seq)] with [Group   36 (   1 seq)]-->[Len=  154][PID:27595]	Group  151: [Group   85 (   1 seq)] with [Group  150 (   2 seq)]-->[Len=  154][PID:27595]	Group  152: [Group   38 (   1 seq)] with [Group  151 (   3 seq)]-->[Len=  154][PID:27595]	Group  153: [Group   39 (   1 seq)] with [Group  152 (   4 seq)]-->[Len=  154][PID:27595]	Group  154: [Group  153 (   5 seq)] with [Group  149 (  13 seq)]-->[Len=  154][PID:27595]	Group  155: [Group  154 (  18 seq)] with [Group  137 (   8 seq)]-->[Len=  154][PID:27595]	Group  156: [Group   60 (   1 seq)] with [Group  155 (  26 seq)]-->[Len=  154][PID:27595]	Group  157: [Group    7 (   1 seq)] with [Group    5 (   1 seq)]-->[Len=  154][PID:27595]	Group  158: [Group   69 (   1 seq)] with [Group  157 (   2 seq)]-->[Len=  154][PID:27595]	Group  159: [Group    6 (   1 seq)] with [Group  158 (   3 seq)]-->[Len=  154][PID:27595]	Group  160: [Group    8 (   1 seq)] with [Group  159 (   4 seq)]-->[Len=  154][PID:27595]	Group  161: [Group   73 (   1 seq)] with [Group    9 (   1 seq)]-->[Len=  154][PID:27595]	Group  162: [Group  161 (   2 seq)] with [Group  160 (   5 seq)]-->[Len=  154][PID:27595]	Group  163: [Group  162 (   7 seq)] with [Group  156 (  27 seq)]-->[Len=  154][PID:27595]	Group  164: [Group  163 (  34 seq)] with [Group  130 (  24 seq)]-->[Len=  154][PID:27595]	Group  165: [Group   11 (   1 seq)] with [Group   10 (   1 seq)]-->[Len=  154][PID:27595]	Group  166: [Group   13 (   1 seq)] with [Group  165 (   2 seq)]-->[Len=  154][PID:27595]	Group  167: [Group   14 (   1 seq)] with [Group   12 (   1 seq)]-->[Len=  154][PID:27595]	Group  168: [Group  167 (   2 seq)] with [Group  166 (   3 seq)]-->[Len=  154][PID:27595]	Group  169: [Group   26 (   1 seq)] with [Group  168 (   5 seq)]-->[Len=  154][PID:27595]	Group  170: [Group   25 (   1 seq)] with [Group   24 (   1 seq)]-->[Len=  154][PID:27595]	Group  171: [Group  170 (   2 seq)] with [Group   23 (   1 seq)]-->[Len=  154][PID:27595]	Group  172: [Group   41 (   1 seq)] with [Group   40 (   1 seq)]-->[Len=  154][PID:27595]	Group  173: [Group  172 (   2 seq)] with [Group  171 (   3 seq)]-->[Len=  154][PID:27595]	Group  174: [Group  173 (   5 seq)] with [Group  169 (   6 seq)]-->[Len=  154][PID:27595]	Group  175: [Group  174 (  11 seq)] with [Group  164 (  58 seq)]-->[Len=  154][PID:27595]	Group  176: [Group   46 (   1 seq)] with [Group  175 (  69 seq)]-->[Len=  154][PID:27595]	Group  177: [Group   93 (   1 seq)] with [Group   92 (   1 seq)]-->[Len=  154][PID:27595]	Group  178: [Group  177 (   2 seq)] with [Group   91 (   1 seq)]-->[Len=  154][PID:27595]	Group  179: [Group  178 (   3 seq)] with [Group  176 (  70 seq)]-->[Len=  154][PID:27595]	Group  180: [Group   74 (   1 seq)] with [Group   48 (   1 seq)]-->[Len=  147][PID:27595]	Group  181: [Group  105 (   1 seq)] with [Group  180 (   2 seq)]-->[Len=  147][PID:27595]	Group  182: [Group   88 (   1 seq)] with [Group  181 (   3 seq)]-->[Len=  147][PID:27595]	Group  183: [Group  103 (   1 seq)] with [Group  102 (   1 seq)]-->[Len=  147][PID:27595]	Group  184: [Group  183 (   2 seq)] with [Group  182 (   4 seq)]-->[Len=  147][PID:27595]	Group  185: [Group   99 (   1 seq)] with [Group   98 (   1 seq)]-->[Len=  147][PID:27595]	Group  186: [Group  185 (   2 seq)] with [Group   82 (   1 seq)]-->[Len=  147][PID:27595]	Group  187: [Group  101 (   1 seq)] with [Group  186 (   3 seq)]-->[Len=  147][PID:27595]	Group  188: [Group  100 (   1 seq)] with [Group   96 (   1 seq)]-->[Len=  147][PID:27595]	Group  189: [Group  188 (   2 seq)] with [Group  187 (   4 seq)]-->[Len=  147][PID:27595]	Group  190: [Group  104 (   1 seq)] with [Group  189 (   6 seq)]-->[Len=  147][PID:27595]	Group  191: [Group  190 (   7 seq)] with [Group  184 (   6 seq)]-->[Len=  147][PID:27595]	Group  192: [Group   90 (   1 seq)] with [Group  191 (  13 seq)]-->[Len=  147][PID:27595]	Group  193: [Group  192 (  14 seq)] with [Group  179 (  73 seq)]-->[Len=  154][PID:27595]	Group  194: [Group   77 (   1 seq)] with [Group  193 (  87 seq)]-->[Len=  160][PID:27595]	Group  195: [Group   97 (   1 seq)] with [Group    4 (   1 seq)]-->[Len=  147][PID:27595]	Group  196: [Group   62 (   1 seq)] with [Group  195 (   2 seq)]-->[Len=  203][PID:27595]	Group  197: [Group   95 (   1 seq)] with [Group   49 (   1 seq)]-->[Len=  150][PID:27595]	Group  198: [Group   87 (   1 seq)] with [Group   57 (   1 seq)]-->[Len=  161][PID:27595]	Group  199: [Group   61 (   1 seq)] with [Group   58 (   1 seq)]-->[Len=  161][PID:27595]	Group  200: [Group   86 (   1 seq)] with [Group  199 (   2 seq)]-->[Len=  161][PID:27595]	Group  201: [Group   80 (   1 seq)] with [Group  200 (   3 seq)]-->[Len=  161][PID:27595]	Group  202: [Group  201 (   4 seq)] with [Group  198 (   2 seq)]-->[Len=  161][PID:27595]	Group  203: [Group   79 (   1 seq)] with [Group  202 (   6 seq)]-->[Len=  161][PID:27595]	Group  204: [Group   64 (   1 seq)] with [Group   59 (   1 seq)]-->[Len=  162][PID:27595]	Group  205: [Group  204 (   2 seq)] with [Group  203 (   7 seq)]-->[Len=  162][PID:27595]	Group  206: [Group   65 (   1 seq)] with [Group  205 (   9 seq)]-->[Len=  163][PID:27595]	Group  207: [Group  206 (  10 seq)] with [Group   50 (   1 seq)]-->[Len=  163][PID:27595]	Group  208: [Group   94 (   1 seq)] with [Group  207 (  11 seq)]-->[Len=  171][PID:27595]	Group  209: [Group   66 (   1 seq)] with [Group   55 (   1 seq)]-->[Len=  146][PID:27595]	Group  210: [Group  209 (   2 seq)] with [Group  208 (  12 seq)]-->[Len=  176][PID:27595]	Group  211: [Group  210 (  14 seq)] with [Group  197 (   2 seq)]-->[Len=  181][PID:27595]	Group  212: [Group  211 (  16 seq)] with [Group  196 (   3 seq)]-->[Len=  219][PID:27595]	Group  213: [Group  212 (  19 seq)] with [Group  194 (  88 seq)]-->[Len=  229][PID:27595]
+
+
+!		[Final Evaluation][TOT=  114][  0 %]!		[Final Evaluation][TOT=  114][  1 %]!		[Final Evaluation][TOT=  114][  2 %]!		[Final Evaluation][TOT=  114][  3 %]!		[Final Evaluation][TOT=  114][  4 %]!		[Final Evaluation][TOT=  114][  5 %]!		[Final Evaluation][TOT=  114][  6 %]!		[Final Evaluation][TOT=  114][  7 %]!		[Final Evaluation][TOT=  114][  8 %]!		[Final Evaluation][TOT=  114][  9 %]!		[Final Evaluation][TOT=  114][ 10 %]!		[Final Evaluation][TOT=  114][ 11 %]!		[Final Evaluation][TOT=  114][ 12 %]!		[Final Evaluation][TOT=  114][ 13 %]!		[Final Evaluation][TOT=  114][ 14 %]!		[Final Evaluation][TOT=  114][ 15 %]!		[Final Evaluation][TOT=  114][ 16 %]!		[Final Evaluation][TOT=  114][ 17 %]!		[Final Evaluation][TOT=  114][ 18 %]!		[Final Evaluation][TOT=  114][ 19 %]!		[Final Evaluation][TOT=  114][ 20 %]!		[Final Evaluation][TOT=  114][ 21 %]!		[Final Evaluation][TOT=  114][ 22 %]!		[Final Evaluation][TOT=  114][ 23 %]!		[Final Evaluation][TOT=  114][ 24 %]!		[Final Evaluation][TOT=  114][ 25 %]!		[Final Evaluation][TOT=  114][ 26 %]!		[Final Evaluation][TOT=  114][ 27 %]!		[Final Evaluation][TOT=  114][ 28 %]!		[Final Evaluation][TOT=  114][ 29 %]!		[Final Evaluation][TOT=  114][ 30 %]!		[Final Evaluation][TOT=  114][ 31 %]!		[Final Evaluation][TOT=  114][ 32 %]!		[Final Evaluation][TOT=  114][ 33 %]!		[Final Evaluation][TOT=  114][ 34 %]!		[Final Evaluation][TOT=  114][ 35 %]!		[Final Evaluation][TOT=  114][ 36 %]!		[Final Evaluation][TOT=  114][ 37 %]!		[Final Evaluation][TOT=  114][ 38 %]!		[Final Evaluation][TOT=  114][ 39 %]!		[Final Evaluation][TOT=  114][ 40 %]!		[Final Evaluation][TOT=  114][ 41 %]!		[Final Evaluation][TOT=  114][ 42 %]!		[Final Evaluation][TOT=  114][ 43 %]!		[Final Evaluation][TOT=  114][ 44 %]!		[Final Evaluation][TOT=  114][ 45 %]!		[Final Evaluation][TOT=  114][ 46 %]!		[Final Evaluation][TOT=  114][ 47 %]!		[Final Evaluation][TOT=  114][ 48 %]!		[Final Evaluation][TOT=  114][ 49 %]!		[Final Evaluation][TOT=  114][ 50 %]!		[Final Evaluation][TOT=  114][ 51 %]!		[Final Evaluation][TOT=  114][ 52 %]!		[Final Evaluation][TOT=  114][ 53 %]!		[Final Evaluation][TOT=  114][ 54 %]!		[Final Evaluation][TOT=  114][ 55 %]!		[Final Evaluation][TOT=  114][ 56 %]!		[Final Evaluation][TOT=  114][ 57 %]!		[Final Evaluation][TOT=  114][ 58 %]!		[Final Evaluation][TOT=  114][ 59 %]!		[Final Evaluation][TOT=  114][ 60 %]!		[Final Evaluation][TOT=  114][ 61 %]!		[Final Evaluation][TOT=  114][ 62 %]!		[Final Evaluation][TOT=  114][ 63 %]!		[Final Evaluation][TOT=  114][ 64 %]!		[Final Evaluation][TOT=  114][ 65 %]!		[Final Evaluation][TOT=  114][ 66 %]!		[Final Evaluation][TOT=  114][ 67 %]!		[Final Evaluation][TOT=  114][ 68 %]!		[Final Evaluation][TOT=  114][ 69 %]!		[Final Evaluation][TOT=  114][ 70 %]!		[Final Evaluation][TOT=  114][ 71 %]!		[Final Evaluation][TOT=  114][ 72 %]!		[Final Evaluation][TOT=  114][ 73 %]!		[Final Evaluation][TOT=  114][ 74 %]!		[Final Evaluation][TOT=  114][ 75 %]!		[Final Evaluation][TOT=  114][ 76 %]!		[Final Evaluation][TOT=  114][ 77 %]!		[Final Evaluation][TOT=  114][ 78 %]!		[Final Evaluation][TOT=  114][ 79 %]!		[Final Evaluation][TOT=  114][ 80 %]!		[Final Evaluation][TOT=  114][ 81 %]!		[Final Evaluation][TOT=  114][ 82 %]!		[Final Evaluation][TOT=  114][ 83 %]!		[Final Evaluation][TOT=  114][ 84 %]!		[Final Evaluation][TOT=  114][ 85 %]!		[Final Evaluation][TOT=  114][ 86 %]!		[Final Evaluation][TOT=  114][ 87 %]!		[Final Evaluation][TOT=  114][ 88 %]!		[Final Evaluation][TOT=  114][ 89 %]!		[Final Evaluation][TOT=  114][ 90 %]!		[Final Evaluation][TOT=  114][ 91 %]!		[Final Evaluation][TOT=  114][ 92 %]!		[Final Evaluation][TOT=  114][ 93 %]!		[Final Evaluation][TOT=  114][ 94 %]!		[Final Evaluation][TOT=  114][ 95 %]!		[Final Evaluation][TOT=  114][ 96 %]!		[Final Evaluation][TOT=  114][ 97 %]!		[Final Evaluation][TOT=  114][ 98 %]!		[Final Evaluation][TOT=  114][ 99 %]!		[Final Evaluation][TOT=  114][100 %][ ELAPSED  TIME:    1 sec.]
+
+
+CANNOT WRITE output/3874/output/3874/pssm.aln.html
+
+--ERROR: FORCED EXIT (NON INTERACTIVE MODE pid 27595): WRITE output/3874/output/3874/pssm.aln.html
+
+
+*************************************************************************************************
+*                        FULL TRACE BACK PID: 27595                                    
+27595 -- ERROR: FORCED EXIT (NON INTERACTIVE MODE pid 27595): WRITE output/3874/output/3874/pssm.aln.html
+27595 -- COM: t_coffee -seq output/3874/pssm.fasta -outfile output/3874/pssm.aln -run_name output/3874/pssm 
+27595 -- STACK: 27111 -> 27595
+*************************************************************************************************
+
+# TERMINATION STATUS: FAILURE [PROGRAM: T-COFFEE pid 27595 ppid 27111
+#CL: t_coffee -seq output/3874/pssm.fasta -outfile output/3874/pssm.aln -run_name output/3874/pssm 
++ t_coffee -profile output/3874/pssm.aln -seq output/3874/seq.fasta -output clustalw -outfile output/3874/seq.aln -run_name output/3874/seq
+
+PROGRAM: T-COFFEE Version_13.46.1.b8b01e06 (2024-06-07 10:18:23 - Revision 114dbc01 - Build 1078)
+-full_log      	S	[0] 
+-genepred_score	S	[0] 	nsd
+-run_name      	S	[1] 	output/3874/seq
+-mem_mode      	S	[0] 	mem
+-extend        	D	[1] 	1 
+-extend_mode   	S	[0] 	very_fast_triplet
+-max_n_pair    	D	[0] 	10 
+-seq_name_for_quadruplet	S	[0] 	all
+-compact       	S	[0] 	default
+-clean         	S	[0] 	no
+-do_self       	FL	[0] 	0
+-do_normalise  	D	[0] 	1000 
+-template_file 	S	[0] 
+-template_dir_E_	S	[0] 	./
+-setenv        	S	[0] 	0
+-export        	S	[0] 	0
+-template_mode 	S	[0] 
+-flip          	D	[0] 	0 
+-remove_template_file	D	[0] 	0 
+-profile_template_file	S	[0] 
+-in            	S	[0] 
+-seq           	S	[1] 	output/3874/seq.fasta
+-aln           	S	[0] 
+-method_limits 	S	[0] 
+-method        	S	[0] 
+-lib           	S	[0] 
+-profile       	S	[1] 	output/3874/pssm.aln
+-profile1      	S	[0] 
+-profile2      	S	[0] 
+-pdb           	S	[0] 
+-relax_lib     	D	[0] 	1 
+-filter_lib    	D	[0] 	0 
+-shrink_lib    	D	[0] 	0 
+-out_lib       	W_F	[0] 	no
+-out_lib_mode  	S	[0] 	primary
+-lib_only      	D	[0] 	0 
+-outseqweight  	W_F	[0] 	no
+-seq_source    	S	[0] 	ANY
+-cosmetic_penalty	D	[0] 	0 
+-gapopen       	D	[0] 	0 
+-gapext        	D	[0] 	0 
+-fgapopen      	D	[0] 	0 
+-fgapext       	D	[0] 	0 
+-nomatch       	D	[0] 	0 
+-newtree       	W_F	[0] 	default
+-tree          	W_F	[0] 	NO
+-usetree       	R_F	[0] 
+-tree_mode     	S	[0] 	nj
+-distance_matrix_mode	S	[0] 	ktup
+-distance_matrix_sim_mode	S	[0] 	idmat_sim1
+-quicktree     	FL	[0] 	0
+-outfile       	W_F	[1] 	output/3874/seq.aln
+-maximise      	FL	[1] 	1
+-output        	S	[1] 	clustalw
+-len           	D	[0] 	0 
+-infile        	R_F	[0] 
+-matrix        	S	[0] 	default
+-fs_matrix     	S	[0] 	idmat
+-fs_gop        	D	[0] 	1 
+-fs_gep        	D	[0] 	1 
+-tg_mode       	D	[0] 	1 
+-profile_mode  	S	[0] 	cw_profile_profile
+-profile_comparison	S	[0] 	profile
+-dp_mode       	S	[0] 	linked_pair_wise
+-ktuple        	D	[0] 	1 
+-ndiag         	D	[0] 	0 
+-diag_threshold	D	[0] 	0 
+-diag_mode     	D	[0] 	0 
+-sim_matrix    	S	[0] 	vasiliky
+-transform     	S	[0] 
+-extend_seq    	FL	[0] 	0
+-outorder      	S	[0] 	input
+-inorder       	S	[0] 	aligned
+-seqnos        	S	[0] 	off
+-case          	S	[0] 	keep
+-cpu           	D	[0] 	0 
+-ulimit        	D	[0] 	-1 
+-maxnseq       	D	[0] 	-1 
+-maxlen        	D	[0] 	-1 
+-sample_dp     	D	[0] 	0 
+-weight        	S	[0] 	default
+-seq_weight    	S	[0] 	no
+-align         	FL	[1] 	1
+-mocca         	FL	[0] 	0
+-domain        	FL	[0] 	0
+-start         	D	[0] 	0 
+-len           	D	[0] 	0 
+-scale         	D	[0] 	0 
+-mocca_interactive	FL	[0] 	0
+-method_evaluate_mode	S	[0] 	default
+-color_mode    	S	[0] 	new
+-aln_line_length	D	[0] 	0 
+-evaluate_mode 	S	[0] 	triplet
+-get_type      	FL	[0] 	0
+-clean_aln     	D	[0] 	0 
+-clean_threshold	D	[1] 	1 
+-clean_iteration	D	[1] 	1 
+-clean_evaluate_mode	S	[0] 	t_coffee_fast
+-extend_matrix 	FL	[0] 	0
+-prot_min_sim  	D	[0] 	0 
+-prot_max_sim  	D	[100] 	100 
+-psiJ          	D	[0] 	3 
+-psitrim_mode  	S	[0] 	regtrim
+-psitrim_tree  	S	[0] 	codnd
+-psitrim       	D	[100] 	100 
+-prot_min_cov  	D	[90] 	90 
+-pdb_type      	S	[0] 	d
+-pdb_min_sim   	D	[35] 	35 
+-pdb_max_sim   	D	[100] 	100 
+-pdb_min_cov   	D	[50] 	50 
+-pdb_blast_server	W_F	[0] 	EBI
+-blast         	W_F	[0] 
+-blast_server  	W_F	[0] 	EBI
+-pdb_db        	W_F	[0] 	pdb
+-protein_db    	W_F	[0] 	uniref50
+-method_log    	W_F	[0] 	no
+-struc_to_use  	S	[0] 
+-cache         	W_F	[0] 	use
+-print_cache   	FL	[0] 	0
+-align_pdb_param_file	W_F	[0] 	no
+-align_pdb_hasch_mode	W_F	[0] 	hasch_ca_trace_bubble
+-external_aligner	S	[0] 	NO
+-msa_mode      	S	[0] 	tree
+-et_mode       	S	[0] 	et
+-master        	S	[0] 	no
+-blast_nseq    	D	[0] 	0 
+-lalign_n_top  	D	[0] 	10 
+-iterate       	D	[0] 	0 
+-trim          	D	[0] 	0 
+-split         	D	[0] 	0 
+-trimfile      	S	[0] 	default
+-split         	D	[0] 	0 
+-split_nseq_thres	D	[0] 	0 
+-split_score_thres	D	[0] 	0 
+-check_pdb_status	D	[0] 	0 
+-clean_seq_name	D	[0] 	0 
+-seq_to_keep   	S	[0] 
+-dpa_master_aln	S	[0] 
+-dpa_maxnseq   	D	[0] 	0 
+-dpa_min_score1	D	[0] 
+-dpa_min_score2	D	[0] 
+-dpa_keep_tmpfile	FL	[0] 	0
+-dpa_debug     	D	[0] 	0 
+-multi_core    	S	[0] 	templates_jobs_relax_msa_evaluate
+-n_core        	D	[0] 	1 
+-thread        	D	[0] 	1 
+-max_n_proc    	D	[0] 	1 
+-lib_list      	S	[0] 
+-prune_lib_mode	S	[0] 	5
+-tip           	S	[0] 	none
+-rna_lib       	S	[0] 
+-no_warning    	D	[0] 	0 
+-run_local_script	D	[0] 	0 
+-proxy         	S	[0] 	unset
+-email         	S	[0] 
+-clean_overaln 	D	[0] 	0 
+-overaln_param 	S	[0] 
+-overaln_mode  	S	[0] 
+-overaln_model 	S	[0] 
+-overaln_threshold	D	[0] 	0 
+-overaln_target	D	[0] 	0 
+-overaln_P1    	D	[0] 	0 
+-overaln_P2    	D	[0] 	0 
+-overaln_P3    	D	[0] 	0 
+-overaln_P4    	D	[0] 	0 
+-exon_boundaries	S	[0] 
+-display       	D	[0] 	100 
+
+INPUT FILES
+	Input File (R) output/3874/pssm.aln  Format clustal_aln
+	Input File (S) output/3874/seq.fasta  Format fasta_seq
+	Input File (M) proba_pair 
+
+Identify Master Sequences [no]:
+
+Master Sequences Identified
+INPUT SEQUENCES: 3 SEQUENCES  [PROTEIN]
+  Input File output/3874/seq.fasta Seq C0HJR0               Length  154 type PROTEIN Struct Unchecked
+  Input File output/3874/seq.fasta Seq P80722               Length  149 type PROTEIN Struct Unchecked
+  Input File                      Seq output/3874/pssm.aln Length  229 type PROTEIN Struct Unchecked
+	Profile: Template=output/3874/pssm.aln, File=output/3874/pssm.aln
+
+	Multi Core Mode (read): 1 processor(s):
+
+	--- Process Method/Library/Aln Routput/3874/pssm.aln
+	xxx Retrieved Routput/3874/pssm.aln
+	--- Process Method/Library/Aln Soutput/3874/seq.fasta
+	xxx Retrieved Soutput/3874/seq.fasta
+	--- Process Method/Library/Aln Mproba_pair
+! profile/profile alignment --- use proba_pair
+
+	xxx Retrieved Mproba_pair
+
+	All Methods Retrieved
+
+MANUAL PENALTIES: gapopen=0 gapext=0
+
+	Library Total Size: [2798]
+
+Library Relaxation: Multi_proc [1]
+ 
+!		[Relax Library][TOT=    3][  0 %]!		[Relax Library][TOT=    3][ 66 %]!		[Relax Library][TOT=    3][100 %]
+
+Relaxation Summary: [2798]--->[1719]
+
+
+
+UN-WEIGHTED MODE: EVERY SEQUENCE WEIGHTS 1
+
+MAKE GUIDE TREE 
+	[MODE=nj][DONE]
+
+PROGRESSIVE_ALIGNMENT [Tree Based]
+Group    1: C0HJR0
+Group    2: P80722
+Group    3: output/3874/pssm.aln
+
+#Single Thread
+
+	Group    4: [Group    3 (   1 seq)] with [Group    1 (   1 seq)]-->[Len=  229][PID:27993]
+	Group    5: [Group    2 (   1 seq)] with [Group    4 (   2 seq)]-->[Len=  229][PID:27993]
+
+
+!		[Final Evaluation][TOT=  114][  0 %]!		[Final Evaluation][TOT=  114][  1 %]!		[Final Evaluation][TOT=  114][  2 %]!		[Final Evaluation][TOT=  114][  3 %]!		[Final Evaluation][TOT=  114][  4 %]!		[Final Evaluation][TOT=  114][  5 %]!		[Final Evaluation][TOT=  114][  6 %]!		[Final Evaluation][TOT=  114][  7 %]!		[Final Evaluation][TOT=  114][  8 %]!		[Final Evaluation][TOT=  114][  9 %]!		[Final Evaluation][TOT=  114][ 10 %]!		[Final Evaluation][TOT=  114][ 11 %]!		[Final Evaluation][TOT=  114][ 12 %]!		[Final Evaluation][TOT=  114][ 13 %]!		[Final Evaluation][TOT=  114][ 14 %]!		[Final Evaluation][TOT=  114][ 15 %]!		[Final Evaluation][TOT=  114][ 16 %]!		[Final Evaluation][TOT=  114][ 17 %]!		[Final Evaluation][TOT=  114][ 18 %]!		[Final Evaluation][TOT=  114][ 19 %]!		[Final Evaluation][TOT=  114][ 20 %]!		[Final Evaluation][TOT=  114][ 21 %]!		[Final Evaluation][TOT=  114][ 22 %]!		[Final Evaluation][TOT=  114][ 23 %]!		[Final Evaluation][TOT=  114][ 24 %]!		[Final Evaluation][TOT=  114][ 25 %]!		[Final Evaluation][TOT=  114][ 26 %]!		[Final Evaluation][TOT=  114][ 27 %]!		[Final Evaluation][TOT=  114][ 28 %]!		[Final Evaluation][TOT=  114][ 29 %]!		[Final Evaluation][TOT=  114][ 30 %]!		[Final Evaluation][TOT=  114][ 31 %]!		[Final Evaluation][TOT=  114][ 32 %]!		[Final Evaluation][TOT=  114][ 33 %]!		[Final Evaluation][TOT=  114][ 34 %]!		[Final Evaluation][TOT=  114][ 35 %]!		[Final Evaluation][TOT=  114][ 36 %]!		[Final Evaluation][TOT=  114][ 37 %]!		[Final Evaluation][TOT=  114][ 38 %]!		[Final Evaluation][TOT=  114][ 39 %]!		[Final Evaluation][TOT=  114][ 40 %]!		[Final Evaluation][TOT=  114][ 41 %]!		[Final Evaluation][TOT=  114][ 42 %]!		[Final Evaluation][TOT=  114][ 43 %]!		[Final Evaluation][TOT=  114][ 44 %]!		[Final Evaluation][TOT=  114][ 45 %]!		[Final Evaluation][TOT=  114][ 46 %]!		[Final Evaluation][TOT=  114][ 47 %]!		[Final Evaluation][TOT=  114][ 48 %]!		[Final Evaluation][TOT=  114][ 49 %]!		[Final Evaluation][TOT=  114][ 50 %]!		[Final Evaluation][TOT=  114][ 51 %]!		[Final Evaluation][TOT=  114][ 52 %]!		[Final Evaluation][TOT=  114][ 53 %]!		[Final Evaluation][TOT=  114][ 54 %]!		[Final Evaluation][TOT=  114][ 55 %]!		[Final Evaluation][TOT=  114][ 56 %]!		[Final Evaluation][TOT=  114][ 57 %]!		[Final Evaluation][TOT=  114][ 58 %]!		[Final Evaluation][TOT=  114][ 59 %]!		[Final Evaluation][TOT=  114][ 60 %]!		[Final Evaluation][TOT=  114][ 61 %]!		[Final Evaluation][TOT=  114][ 62 %]!		[Final Evaluation][TOT=  114][ 63 %]!		[Final Evaluation][TOT=  114][ 64 %]!		[Final Evaluation][TOT=  114][ 65 %]!		[Final Evaluation][TOT=  114][ 66 %]!		[Final Evaluation][TOT=  114][ 67 %]!		[Final Evaluation][TOT=  114][ 68 %]!		[Final Evaluation][TOT=  114][ 69 %]!		[Final Evaluation][TOT=  114][ 70 %]!		[Final Evaluation][TOT=  114][ 71 %]!		[Final Evaluation][TOT=  114][ 72 %]!		[Final Evaluation][TOT=  114][ 73 %]!		[Final Evaluation][TOT=  114][ 74 %]!		[Final Evaluation][TOT=  114][ 75 %]!		[Final Evaluation][TOT=  114][ 76 %]!		[Final Evaluation][TOT=  114][ 77 %]!		[Final Evaluation][TOT=  114][ 78 %]!		[Final Evaluation][TOT=  114][ 79 %]!		[Final Evaluation][TOT=  114][ 80 %]!		[Final Evaluation][TOT=  114][ 81 %]!		[Final Evaluation][TOT=  114][ 82 %]!		[Final Evaluation][TOT=  114][ 83 %]!		[Final Evaluation][TOT=  114][ 84 %]!		[Final Evaluation][TOT=  114][ 85 %]!		[Final Evaluation][TOT=  114][ 86 %]!		[Final Evaluation][TOT=  114][ 87 %]!		[Final Evaluation][TOT=  114][ 88 %]!		[Final Evaluation][TOT=  114][ 89 %]!		[Final Evaluation][TOT=  114][ 90 %]!		[Final Evaluation][TOT=  114][ 91 %]!		[Final Evaluation][TOT=  114][ 92 %]!		[Final Evaluation][TOT=  114][ 93 %]!		[Final Evaluation][TOT=  114][ 94 %]!		[Final Evaluation][TOT=  114][ 95 %]!		[Final Evaluation][TOT=  114][ 96 %]!		[Final Evaluation][TOT=  114][ 97 %]!		[Final Evaluation][TOT=  114][ 98 %]!		[Final Evaluation][TOT=  114][ 99 %]!		[Final Evaluation][TOT=  114][100 %]
+
+CLUSTAL FORMAT for T-COFFEE Version_13.46.1.b8b01e06 [http://www.tcoffee.org] [MODE:  ], CPU=0.00 sec, SCORE=0, Nseq=109, Len=229 
+
+C0HJR0          --------------------------------------------------
+P80722          --------------------------------------------------
+spP02191        -----------------------------mg-------------------
+spP02192        -----------------------------mg-------------------
+spB7U9B5        -----------------------------mg-------------------
+spP84997        -----------------------------mg-------------------
+spP68082        -----------------------------mg-------------------
+spP02189        -----------------------------mg-------------------
+spP02165        -----------------------------mg-------------------
+spR9RZK8        -----------------------------mv-------------------
+spP02170        -----------------------------mg-------------------
+spP02169        -----------------------------mg-------------------
+spP02178        -----------------------------mv-------------------
+spP02181        -----------------------------mg-------------------
+spP02177        -----------------------------mv-------------------
+spP02145        -----------------------------mg-------------------
+spP02174        -----------------------------mg-------------------
+spP11343        -----------------------------mg-------------------
+spP02147        -----------------------------mg-------------------
+spP68277        -----------------------------mg-------------------
+spP68276        -----------------------------mg-------------------
+spP02166        -----------------------------mg-------------------
+spP02144        -----------------------------mg-------------------
+spP68084        -----------------------------mg-------------------
+spP02173        -----------------------------mg-------------------
+spP02151        -----------------------------mg-------------------
+spP02171        -----------------------------mg-------------------
+spP02150        -----------------------------mg-------------------
+spP02179        -----------------------------mv-------------------
+spP02183        -----------------------------mg-------------------
+spP02167        -----------------------------mg-------------------
+spP02152        -----------------------------mg-------------------
+spP20856        -----------------------------mg-------------------
+spP02148        -----------------------------mg-------------------
+spP62734        -----------------------------mg-------------------
+spQ0KIY9        -----------------------------mg-------------------
+spP02153        -----------------------------mg-------------------
+spP02180        -----------------------------mv-------------------
+spP02163        -----------------------------mg-------------------
+spQ0KIY6        -----------------------------mg-------------------
+spP02182        -----------------------------mg-------------------
+spP02157        -----------------------------mg-------------------
+spP32428        -----------------------------mg-------------------
+spQ0KIY3        -----------------------------mg-------------------
+spP02186        -----------------------------mg-------------------
+spP02164        -----------------------------mg-------------------
+spP04248        -----------------------------mg-------------------
+spP02155        -----------------------------mg-------------------
+spP02154        -----------------------------mg-------------------
+spC0HJQ9        -----------------------------mg-------------------
+spP02187        -----------------------------mg-------------------
+spQ6PL31        -----------------------------mg-------------------
+spP02156        -----------------------------mg-------------------
+spP04250        -----------------------------mg-------------------
+spP14396        -----------------------------mg-------------------
+spP04249        -----------------------------mg-------------------
+spP68080        -----------------------------mg-------------------
+spC0HKB7        -----------------------------mg-------------------
+spP02161        -----------------------------mg-------------------
+spP02185        -----------------------------mv-------------------
+spP02168        -----------------------------mg-------------------
+spP02184        -----------------------------mv-------------------
+spP02193        -----------------------------mg-------------------
+spP02160        -----------------------------mg-------------------
+spP63113        -----------------------------mg-------------------
+spP02159        -----------------------------mg-------------------
+spP30562        -----------------------------mg-------------------
+spQ9QZ76        -----------------------------mg-------------------
+spP02194        -----------------------------mg-------------------
+spP02195        -----------------------------mg-------------------
+spP04247        -----------------------------mg-------------------
+spP83682        -----------------------------mg-------------------
+spP80721        -----------------------------mt-------------------
+spP68189        -----------------------------ma-------------------
+spP02205        -----------------------------ma-------------------
+spQ9DEP1        -----------------------------ma-------------------
+spQ9DEN8        -----------------------------ma-------------------
+spP87497        -----------------------------ma-------------------
+spQ9DEN9        -----------------------------ma-------------------
+spP02214        --------------------------------------------------
+spQ9DGJ2        -----------------------------ma-------------------
+spQ7M424        --------------------------------------------------
+spQ9DEP0        -----------------------------ma-------------------
+spQ7T044        -----------------------------ma-------------------
+spP84298        -----------------------------mkffavlalciv---------
+spQ9DGJ0        -----------------------------ma-------------------
+spP12549        -----------------------------mkffavlalciv---------
+spQ23762        -----------------------------mkffavlalciv---------
+spQ23763        -----------------------------mkffavlalciv---------
+spP12548        -----------------------------mkffavlalciv---------
+spQ6VN46        -----------------------------ma-------------------
+spQ9DGJ1        -----------------------------ma-------------------
+spQ9DGI9        -----------------------------ma-------------------
+spP12550        -----------------------------mkffavlalcvv---------
+spP29242        -----------------------------mkffavlalcvv---------
+spQ6I7B0        -----------------------------ma-------------------
+spP18966        -----------------------------mkffavlalciv---------
+spQ7LZM3        -----------------------------mg-------------------
+spQ7M416        --------------------------------------------------
+spP29243        -----------------------------mkffavltlcii---------
+spP84296        -----------------------------mkffavlalciv---------
+spQ8T7J9        --------------------------------------------------
+spQ7LZM5        -----------------------------mg-------------------
+spQ7LZM4        -----------------------------mg-------------------
+spP19363        dishfqnfrvtlleyltengmngaqkaswnkafdafekyiimglsslerv
+spP09965        --------------------------------------------------
+spP29287        --------------------------------------------------
+spO76242        --------------------------------------------------
+spP02224        -----------------------------mkflv-lalcia---------
+                                                                  
+
+C0HJR0          ----mglsdgewqlvlnawgkv---ead---vaghgqevlirlftghpet
+P80722          ----mvltkdefdsllheldpkidteeh---rmelglgaytelfaahpey
+spP02191        ------lsdgewqlvlnawgkv---eadv---aghgqevlirlftghpet
+spP02192        ------lsdgewqlvlnawgkv---eadv---aghgqevlirlftghpet
+spB7U9B5        ------lsdgewtlvlnawgkv---eadv---aghgqevlirlftghpet
+spP84997        ------lsdgewqlvlnawgkv---etdv---aghgqevlirlftghpet
+spP68082        ------lsdgewqqvlnvwgkv---eadi---aghgqevlirlftghpet
+spP02189        ------lsdgewqlvlnvwgkv---eadv---aghgqevlirlfkghpet
+spP02165        ------lsdgewqlvlnvwgkv---eadv---aghgqevlirlfkghpet
+spR9RZK8        ------lsdgewqlvlniwakv---eadv---aghgqdvlirlfkghpet
+spP02170        ------lsdaewqlvlnvwgkv---eadl---aghgqevlirlfhthpet
+spP02169        ------lsdgewqlvlnvwgkv---eadv---gghgqevlirlftghpet
+spP02178        ------lsdaewqlvlniwakv---eadv---aghgqdilirlfkghpet
+spP02181        ------lsdgewqlvlniwgkv---eadl---aghgqdvlirlfkghpet
+spP02177        ------lsdaewqlvlniwakv---eadv---aghgqdilirlfkghpet
+spP02145        ------lsdgewqlvlnvwgkv---eadi---pghgqevlirlfkghpet
+spP02174        ------lsdgewqlvlnvwgkv---eadl---aghgqdilirlfkghpet
+spP11343        ------lsdgewqlvlnvwgkv---eadl---aghgqevlirlfkghpet
+spP02147        ------lsdgewqlvlnvwgkv---eadi---sghgqevlirlfkghpet
+spP68277        ------lsegewqlvlnvwgkv---eadl---aghgqdvlirlfkghpet
+spP68276        ------lsdgewqlvlnvwgkv---eadl---aghgqdvlirlfkghpet
+spP02166        ------lsdgewqsvlnvwgkv---eadl---aghgqeilirlftahpet
+spP02144        ------lsdgewqlvlnvwgkv---eadi---pghgqevlirlfkghpet
+spP68084        ------lsdgewqlvlnvwgkv---eadi---pshgqevlirlfkghpet
+spP02173        ------lsdgewqlvlnvwgkv---eadl---aghgqdilirlfkghpet
+spP02151        ------lsdgewqlvlnvwgkv---eadv---pshgqevlislfkghpet
+spP02171        ------lsdgewqlvlnvwgkv---eadl---aghgqevlirlfknhpet
+spP02150        ------lsdgewqlvlnvwgkv---eadi---pshgqevlirlfkghpet
+spP02179        ------lsdaewhlvlniwakv---eadv---aghgqdilirlfkghpet
+spP02183        ------lseaewqlvlhvwakv---eadl---sghgqeilirlfkghpet
+spP02167        ------lsdgewqsvlnvwgkv---eadl---aghgqeilirlftahpet
+spP02152        ------lsdgewqlvlnvwgkv---eadi---pshgqevlislfkghpet
+spP20856        ------lsdgewqlvlnawgkv---etdi---gghgqevlirlfkghpet
+spP02148        ------lsdgewqlvlnvwgkv---eadi---pshgqevlirlfkghpet
+spP62734        ------lsdgewqlvlnvwgkv---eadi---pshgqevlirlfkghpet
+spQ0KIY9        ------lseaewqlvlhvwakv---eadl---sghgqeilirlfkghpet
+spP02153        ------lsdgewqlvlnvwgkv---eadi---pshgqevlislfkghpet
+spP02180        ------ltdaewhlvlniwakv---eadv---aghgqdilislfkghpet
+spP02163        ------lsdgewqlvlnvwgkv---eadi---pghgqevlirlfkghpet
+spQ0KIY6        ------lsdgewqlvlnvwgkv---eadl---aghgqdvlirlfkghpet
+spP02182        ------lseaewqlvlhvwakv---eadl---sghgqeilirlfkghpet
+spP02157        ------lsdgewqlvlnvwgkv---eadl---aghgqevlirlfkghpet
+spP32428        ------lsdgewqlvlhvwgkv---eadl---aghgqdvlirlfkahpet
+spQ0KIY3        ------lsdgewqlvlnvwgkv---eadl---aghgqdilirlfkghpet
+spP02186        ------lsdgewelvlktwgkv---eadi---pghgetvfvrlftghpet
+spP02164        ------lsdaewqlvlnvwgkv---eadi---pghgqdvlirlfkghpet
+spP04248        ------lsdgewqlvlnvwgkv---egdl---aghgqevliklfknhpet
+spP02155        ------lsdgewqlvlniwgkv---eadi---pshgqevlislfkghpet
+spP02154        ------lsdgewqlvlniwgkv---eadi---pshgqevlislfkghpet
+spC0HJQ9        ------lsdgewqlvlnvwgkv---egdi---gghgqevlirlfkghpet
+spP02187        ------lsdgewelvlktwgkv---eadi---pghgefvlvrlftghpet
+spQ6PL31        ------lsdgewqlvltvwgkv---eadl---aghgqevlirlfknhpet
+spP02156        ------lsdgewqlvlnvwgkv---eadi---pghgqevlirlfkdhpet
+spP04250        ------lsdgewqlvlnvwgkv---eadl---gghgqevlirlfkghpet
+spP14396        ------lsdgewqlvlhvwgkv---eadl---aghgqevlirlfkghpet
+spP04249        ------lsdgewqlvlnvwgkv---egdl---sghgqevlirlfkghpet
+spP68080        ------lsdgewhlvlnvwgkv---etdl---aghgqevlirlfkshpet
+spC0HKB7        ------lsdgewqlvlkvwgkv---eadi---aghgqevlirlfkdhpet
+spP02161        ------lsdgewqlvlniwgkv---eadl---vghgqevlirlfkghpet
+spP02185        ------lsegewqlvlhvwakv---eadv---aghgqdilirlfkshpet
+spP02168        ------lsdgewqlvlkiwgkv---eadl---aghgqdvlirlftahpet
+spP02184        ------lsegewqlvlhvwakv---eadi---aghgqdilirlfkhhpet
+spP02193        ------lsdgewqlvlnawgkv---eadi---pghgqevlirlfkghpet
+spP02160        ------lsdgewqlvlniwgkv---etdl---aghgqevlirlfknhpet
+spP63113        ------lsdgewqivlniwgkv---etdl---aghgqevlirlfknhpet
+spP02159        ------lsdgewqivlniwgkv---etdl---aghgqevlirlfknhpet
+spP30562        ------lsdgewhlvlnvwgkw---etdl---aghgqevlirlfkshpet
+spQ9QZ76        ------lsdgewqmvlniwgkv---egdl---aghgqevlislfkahpet
+spP02194        ------lsdgewqlvlniwgkv---etde---gghgkdvlirlfkghpet
+spP02195        ------lsdgewqlvlkvwgkv---etdi---tghgqdvlirlfkthpet
+spP04247        ------lsdgewqlvlnvwgkv---eadl---aghgqevliglfkthpet
+spP83682        ------lsegewqlvlxxxxkv---eadl---aghgqdvlirlfkghpet
+spP80721        ------ltkheqdillkelgphvdtpahi---vetglgayhalftahpqy
+spP68189        ----------dfdavlkcwgpv---eady---ttigglvltrlfkehpet
+spP02205        ----------dfdavlkcwgpv---eady---ttmgglvltrlfkehpet
+spQ9DEP1        ----------dfdmvlkcwglv---eady---atygslvltrlftehpet
+spQ9DEN8        ----------dfdmvlkcwgpm---eady---athgglvltrlftehpet
+spP87497        ----------dfdmvlkcwgpm---eadh---athgslvltrlftehpet
+spQ9DEN9        ----------dfdmvlkcwgpv---eady---tthgslvltrlftehpet
+spP02214        -----gldgaqktalkeswkvl---gadgptmmkngsllfgllfktypdt
+spQ9DGJ2        ----------dfdavlkcwgpv---eady---ttigglvltrlfkehpdt
+spQ7M424        -----altepqktalkdswkll---agdgktmmksgallfgllfkshpdt
+spQ9DEP0        ----------dfdmvlkcwgpv---eadh---athgslvltrlftehpet
+spQ7T044        ----------dfdmvlkcwgpv---eadh---athgslvltrlftehpet
+spP84298        gaiaspltadeaslvqsswkav---sh-------neveilaavfaaypdi
+spQ9DGJ0        ----------dfdavlkfwgpv---eady---tshgglvltrlfkehpet
+spP12549        gaiaspltadeaslvqsswkav---sh-------neveilaavfaaypdi
+spQ23762        gaiaspltadeaslvqsswkav---sh-------neveilaavfaaypdi
+spQ23763        gaiaspltadeaslvqsswkav---sh-------neveilaavfaaypdi
+spP12548        gaiaspltadeaslvqsswkav---sh-------nevdilaavfaaypdi
+spQ6VN46        ----------dhdlvlkcwgav---eady---aanggevlnrlfkeypdt
+spQ9DGJ1        ----------dfemvlkhwgpv---eady---athgnlvltrlftehpet
+spQ9DGI9        ----------dfdavlkfwgpv---eady---dkignmvltrlftehpdt
+spP12550        gaiasplsadeaaivksswdqv---kh-------nevdilaavfaaypdi
+spP29242        gaiasplsadeanlvksswdqv---kh-------nevdilaavfaaypdi
+spQ6I7B0        ----------dfdavlkcwgpv---eadf---ntvggmvlarlfkdhpdt
+spP18966        gaiaspltadeaslvqsswkav---sh-------neveilaavfaaypdi
+spQ7LZM3        ------lsdqewqqvltiwgkv---esdl---pghghevlmrlfrdhpet
+spQ7M416        -----gisadqakalkddiavv---aqnp---ngcgkalfikmfemnpgw
+spP29243        gaiahpltsdeanlvksswnqv---kh-------nevdilaavfkaypdi
+spP84296        gaiaspltadeaslvqsswkav---sh-------nevdilaavfaaypdi
+spQ8T7J9        ----msfsaaqvdtvrsnwcsm---tadi---daagyrifellfqrnpdy
+spQ7LZM5        ------lsdqewqqvlsiwgkv---esdl---aghghqvlmrlfqdhpet
+spQ7LZM4        ------lsdqewqqvlsiwgkv---esdl---aghghqvlmrlfqdhpet
+spP19363        dp-itglsgleknaildtwgkv---rgnl---qevgkatfgklfaahpey
+spP09965        -----alsaaeaevvakswgpv---fank---dangdnflialfeaypds
+spP29287        -----slsgaeadllakswapv---fank---dangdnflialfeafpds
+spO76242        ----m-----------vnwaav---v----------ddfyqelfkahpey
+spP02224        aasaavltteqadlvkktwstv---kf-------nevdilyavfkaypdi
+                                                          :*   *  
+
+C0HJR0          lekfdkfkhlkteaemkasedlkkhgntvltalggilkkkghhe------
+P80722          ikkfsrlqe-atpanvmaqdgakyyaktlindlvellkastdea------
+spP02191        lekfdkfkhlkteaemkasedlkkhgntvltalggilkk---kghhe---
+spP02192        lekfdkfkhlkteaemkasedlkkhgntvltalggilkk---kghhe---
+spB7U9B5        lekfdkfkhlktgaemkasedlkkhgntvltalggilkk---kghhe---
+spP84997        lekfdkfkhlkteaemkasedlkkhgntvltalggilkk---kghhe---
+spP68082        lekfdkfkhlkteaemkasedlkkhgtvvltalggilkk---kghhe---
+spP02189        lekfdkfkhlksedemkasedlkkhgntvltalggilkk---kghhe---
+spP02165        lekfdkfkhlktedemkasedlkkhgntvlsalggilkk---kgqhe---
+spR9RZK8        lekfdkfkhlkteaemkasedlkkhgntvltalggilkk---kghhe---
+spP02170        lekfdkfkhlksedemkasedlkkhgntvltalgailkk---kghhe---
+spP02169        lekfdkfkhlktademkasedlkkhgttvltalggilkk---kgqhe---
+spP02178        lekfdkfkhlkteaemkasedlkkhgntvltalggilkk---kghhe---
+spP02181        lekfdkfkhlkteaemkasedlkkhgntvltalggilkk---kghhe---
+spP02177        lekfdkfkhlkteaemkasedlkkhgntvltalggilkk---kghhe---
+spP02145        lekfdkfkhlksedemkasedlkkhgatvltalggilkk---kghhe---
+spP02174        lekfdkfkhlkteadmkasedlkkhgntvltalgailkk---kghhe---
+spP11343        lekfdkfkhlksedemkgsedlkkhgntvltalggilkk---kgkhe---
+spP02147        lekfdkfkhlksedemkasedlkkhgatvltalggilkk---kghhe---
+spP68277        lekfdkfkhlkteaemkasedlkkhgntvltalggilkk---kghhd---
+spP68276        lekfdkfkhlkteadmkasedlkkhgntvltalgailkk---kghhd---
+spP02166        lekfdkfknlktpdemkasedlkkhgvtvltalggilkk---kghhe---
+spP02144        lekfdkfkhlksedemkasedlkkhgatvltalggilkk---kghhe---
+spP68084        lekfdkfkhlksedemkasedlkkhgatvltalggilkk---kghhe---
+spP02173        lekfdkfkhlkteadmkasedlkkhgntvltalgailkk---kghhd---
+spP02151        lekfdkfkhlksedemkaseelkkhgvtvltalggilkk---kghhe---
+spP02171        lekfdkfknlksedemkgsddlkkhgntvlsalggilkk---kgqhe---
+spP02150        lekfdkfkhlksedemkasedlkkhgvtvltalggilkk---kghhe---
+spP02179        lekfdkfkhlkteaemkasedlkkhgntvltalggilkk---kghhe---
+spP02183        lekfdkfkhlkseaemkasedlkkhghtvltalggilkk---kghhe---
+spP02167        lekfdkfknlktpdemkasedlkkhgvtvltalggilkk---kgqhe---
+spP02152        lekfdkfkhlksedemkaseelkkhgvtvltalggilkk---kghhe---
+spP20856        lekfdkfkhlksedemkasedlkkhgttvltalgnilkk---kgqhe---
+spP02148        lekfdkfkhlksedemkasedlkkhgatvltalggilkk---kghhe---
+spP62734        lekfdkfkhlksedemkasedlkkhgatvltalggilkk---kghhe---
+spQ0KIY9        lekfdkfkhlkseaemkasedlkkhghtvltalggilkk---kghhe---
+spP02153        lekfdkfkhlksedemkaseelkkhgatvltalggilkk---kgqhe---
+spP02180        lekfdkfkhlkteaemkasedlkkhgntvltalggilkk---kghhe---
+spP02163        lekfdkfkhlksedemkasedlkkhgatvltalggilkk---kgqhe---
+spQ0KIY6        lekfdkfkhlkteadmkasedlkkhgntvltalgailkk---kghhd---
+spP02182        lekfdkfkhlkseaemkasedlkkhghtvltalggilkk---kghhe---
+spP02157        lekfdkfkhlksedemkgsedlkkhgntvltalggilkk---kghqe---
+spP32428        lekfdkfkhiksedemkgsedlkkhgbtvltalggilkk---kghhe---
+spQ0KIY3        lekfdkfkhlkteadmkasedlkkhgitvltalgailkk---kghhd---
+spP02186        lekfdkfkhlktegemkasedlkkqgvtvltalggilkk---kghhe---
+spP02164        lekfdrfkhlktedemkasedlkkhgttvltalggilkk---kgqhe---
+spP04248        lekfdkfkhlksedemkgsedlkkhgntvltalggilkk---kgqha---
+spP02155        lekfdkfkhlksedemkaseelkkhgttvltalggilkk---kgqhe---
+spP02154        lekfdkfkhlksedemkaseelkkhgvtvltalggilkk---kgqhe---
+spC0HJQ9        lekfdkfkhlkaedemrasedlkkhgttvltalggilkk---kgqha---
+spP02187        lekfdkfkhlktegemkasedlkkqgvtvltalggilkk---kghhe---
+spQ6PL31        lekfdkfknlksedemkgsddlkkhgntvlsalggilkk---kgqhe---
+spP02156        lekfdkfkhlksedemkssedlkkhgttvltalggilkk---kgqhe---
+spP04250        lekfdkfkhlkaedemrasedlkkhgttvltalggilkk---rgqha---
+spP14396        lekfnkfkhiksedemkasedlkkhgvtvltalggvlkk---kghhe---
+spP04249        lekfdkfkhlkaedemraseelkkhgttvltalggilkk---kgqha---
+spP68080        lekfdkfkhlkseddmrrsedlrkhgntvltalggilkk---kghhe---
+spC0HKB7        lekfdkfknlktedemkasedlkkhgstvlgalggilkk---kgqhe---
+spP02161        lekfdkfkhlksedemkrsedlkkhgktvltalggilkk---kghhd---
+spP02185        lekfdrfkhlkteaemkasedlkkhgvtvltalgailkk---kghhe---
+spP02168        lekfdkfknlktademkasedlkkhgvtvltalggilkk---kgqhe---
+spP02184        lekfdrfkhlkseaemkasedlkkhgvtvltalgailkk---kghhe---
+spP02193        lekfdkfkhlksedemkasedlkkhgatvltalgnilkk---kgnhe---
+spP02160        ldkfdkfkhlktedemkgsedlkkhgntvltalggilkk---kghhe---
+spP63113        ldkfdkfkhlktedemkgsedlkkhgntvltalggilkk---kghhe---
+spP02159        ldkfdkfkhlktedemkgsedlkkhgntvltalggilkk---kghhe---
+spP30562        lekfdkfkhlkseddmrrsfdlrkhgntvltalggilkk---kghhe---
+spQ9QZ76        lekfdkfknlkseeemkssedlkkhgctvltalgtilkk---kgqha---
+spP02194        lekfdkfkhlksedemkasedlkkhgitvltalgnilkk---kghhe---
+spP02195        lekfdkfkhlktedemkasadlkkhggvvltalgsilkk---kgqhe---
+spP04247        ldkfdkfknlkseedmkgsedlkkhgctvltalgtilkk---kgqha---
+spP83682        lekfdkfkhlktxxxmkasedlkkhgntvltalggilkk---kghhe---
+spP80721        iihfsrleghtien-vmqsegikhyartlteaivhmlke---is-nd---
+spP68189        qklfpkfagia-qadiagnaavsahgatvlkklgellka---kgsha---
+spP02205        qklfpkfagia-qadiagnaaisahgatvlkklgellka---kgsha---
+spQ9DEP1        lklfpkfagia-hgdlagdagvsahgatvlnklgdllka---rggha---
+spQ9DEN8        lklfpkfagia-hgdlagdagvsahgatvlnklgdllka---rgaha---
+spP87497        lklfpkfagia-hgdlagdagvsahgatvlnklgdllka---rgaha---
+spQ9DEN9        lklfpkfagia-hgdlagdagvsahgatvlnklgdllka---rgaha---
+spP02214        kkhfkhfdda-tfaamdttgvgkahgvavfsglgsmics---idddd---
+spQ9DGJ2        qklfpkfagia-qadlagnaaisahgatvlkklgellka---kgsha---
+spQ7M424        kkhfkhfdda-tfatmd-tgvgkahgmavftglgafvss---iddda---
+spQ9DEP0        lklfpkfagia-hgdlagdagvsahgatvlkklgdllka---rggha---
+spQ7T044        lklfpkfagia-hgdlagdagvsahgatvlkklgdllka---rggha---
+spP84298        qnkfsqfagk-dlasikdtgafathatrivsflsevial---sgntsnaa
+spQ9DGJ0        qklfpkftgia-qadmagnaaisahgatvlkklgellka---kgnha---
+spP12549        qnkfsqfagk-dlasikdtgafathatrivsflsevial---sgndsnaa
+spQ23762        qnkfsqfagk-dlasikdtgafathatrivsflsevial---sgnesnas
+spQ23763        qnkfpqfagk-dlasikdtgafathatrivsflsevial---sgnesnas
+spP12548        qakfpqfagk-dlasikdtgafathatrivsflsevial---sgnesnas
+spQ6VN46        lklfpkfsgis-qgdlagspavaahgatvlkklgellka---kgdha---
+spQ9DGJ1        qklfpkfagia-kadmagnaaisahgatvlkklgellka---kgsha---
+spQ9DGI9        qklfpkfagig-lgdmagnaaisahgatvlkklaevlka---kgnha---
+spP12550        qakfpqfagk-dlasikdtaafathatrivsfftevisl---sgnqanls
+spP29242        qakfpqfagk-dlasikdtaafathatrivsfftevisl---sgnqanls
+spQ6I7B0        qklfpkfagia-agdlagnaavaahggtvlkklgellka---kgnha---
+spP18966        qnkfpqfagk-dlasikdtgafathatrivsflsevial---sgnesnas
+spQ7LZM3        ldrferfkglktpdqmkasedlkkhgvtvltqlgkilkq---kgnhe---
+spQ7M416        vekfpawkgk-sldeikasdkitnhggkvinelanwinn---insas---
+spP29243        qakfpqfagk-dldsiktsgqfathatrivsflselial---sgneanls
+spP84296        qakfpqfagk-dlasikdtgafathatrivsflsevial---sgnasnaa
+spQ8T7J9        qskfkafkgl-avsalkgnpnaekhirivlgglgrilga---ln--tp--
+spQ7LZM5        ldrfdkfkglktpdqmkgsedlkkhgvtvltqlgkilkq---kgnhe---
+spQ7LZM4        ldrfekfkglktpdqmkgsedlkkhgvtvltqlgkilkq---kgnhe---
+spP19363        qqmfrffqgv-qlaflvqspkfaahtqrvvsaldqtlla---lnrpsd--
+spP09965        pnffadfkgk-siadiraspklrnvssrivsrlnefvssaadagkma---
+spP29287        anffgdfkgk-siadiraspklrsvssrivnrlndfvgnaadagkma---
+spO76242        qnkfg-fkgv-algslkgnaayktqagktvdyinaaigg-------sa--
+spP02224        makfpqfagk-dldsikdsaafathatrivsflsevisl---agsdanip
+                   *           :                :   :             
+
+C0HJR0          ---aevkhlaeshankhki---pvkylefisdaiihvlhakhpsdfga--
+P80722          ---tlntaiartatkdhkp--rnvsgaefqtgepifikyfshvlttpa--
+spP02191        ---aevkhlaeshankhki-p--vkylefisdaiihvlhakhpsnfg--a
+spP02192        ---aevkhlaeshankhki-p--vkylefisdaiihvlhakhpsdfg--a
+spB7U9B5        ---aevkhlaeshankhki-p--vkylefisdaiihvlhakhpsdfg--a
+spP84997        ---aevkhlaeshankhki-p--vkylefisdaiihvlhdkhpsdfg--a
+spP68082        ---aelkplaqshatkhki-p--ikylefisdaiihvlhskhpgdfg--a
+spP02189        ---aeltplaqshatkhki-p--vkylefiseaiiqvlqskhpgdfg--a
+spP02165        ---aeikplaqshatkhki-p--vkylefiseaiiqvlqskhpgdfg--a
+spR9RZK8        ---aelkplaqshatkhki-p--ikylefisdaiihvlhsrhpgdfg--a
+spP02170        ---aeikplaqshatkhki-p--vkylefiseaiihvlhskhpgdfg--a
+spP02169        ---aelkplaqshatkhki-p--ikylefisdaivhvlhskhpaefg--a
+spP02178        ---aelkplaqshatkhki-p--ikylefisdaiihvlhsrhpadfg--a
+spP02181        ---aelkplaqshatkhki-p--ikylefiseaiihvlhsrhpgdfg--a
+spP02177        ---aelkplaqshatkhki-p--ikylefisdaiihvlhsrhpgdfg--a
+spP02145        ---aeikplaqshatkhki-p--vkylefiseciiqvlhskhpgdfg--a
+spP02174        ---aelkplaqshatkhki-p--ikylefiseaiihvlhsrhpaefg--a
+spP11343        ---aelkplaqshatkhki-p--ikylefiseaiiqvlqskhpgdfg--a
+spP02147        ---aeikplaqshatkhki-p--vkylefiseciiqvlqskhpgdfg--a
+spP68277        ---aelkplaqshatkhki-p--ikylefiseaiihvlhsrhpaefg--a
+spP68276        ---aelkplaqshatkhki-p--ikylefiseaiihvlhsrhpaefg--a
+spP02166        ---aeikplaqshatkhki-p--vkylefiseaiihvlqskhpgdfg--a
+spP02144        ---aeikplaqshatkhki-p--vkylefiseciiqvlqskhpgdfg--a
+spP68084        ---aeikplaqshatkhki-p--vkylelisesiiqvlqskhpgdfg--a
+spP02173        ---aelkplaqshatkhki-p--ikylefiseaiihvlhsrhpaefg--a
+spP02151        ---aelkplaqshatkhki-p--vkylefisdaivhvlqkkhpgdfg--a
+spP02171        ---aelkplaqshatkhki-p--vkylefiseaiiqvlqskhpgdfg--a
+spP02150        ---aeikplaqshatkhki-p--vkylelisesiiqvlqskhpgdfg--a
+spP02179        ---aelkplaqshatkhki-p--ikylefisdaiihvlhsrhpaefg--a
+spP02183        ---aelkplaqshatkhki-p--ikylefisdaiihvlhskhpsdfg--a
+spP02167        ---aeikplaqshatkhki-p--vkylefisgaiihvlqskhpgdfg--a
+spP02152        ---aelkplaqshatkhki-p--vkylefisdaivhvlqkkhpgdfg--a
+spP20856        ---aelaplaqshatkhki-p--vkylefiseaiiqvleskhpgdfg--a
+spP02148        ---aeikplaqshatkhki-p--vkylefisesiiqvlqskhpgdfg--a
+spP62734        ---aeikplaqshatkhki-p--vkylefiseciiqvlqskhpgdfg--a
+spQ0KIY9        ---aelkplaqshatkhki-p--ikylefisdaiihvlhskhpsdfg--a
+spP02153        ---aelkplaqshatkhki-p--vkylefisdaivhvlqkkhpgdfg--a
+spP02180        ---aelkplaqshatkhki-p--ikylefisdaiihvlhsrhpadfg--a
+spP02163        ---aqlkplaqshatkhki-p--vkylefiseviiqvlqskhpgdfg--a
+spQ0KIY6        ---aelkplaqshatkhki-p--ikylefiseaiihvlhsrhpaefg--a
+spP02182        ---aelkplaqshatkhki-p--ikylefisdaiihvlhsrhpsdfg--a
+spP02157        ---aelkplaqshatkhki-p--vkylefisdaiaqvlqskhpgnfa--a
+spP32428        ---aeikplaqshatkhki-p--ikylefiseaiihvlzskhpsbfg--a
+spQ0KIY3        ---aelkplaqshatkhki-p--ikylefiseaiihvlhsrhpaefg--a
+spP02186        ---aeiqplaqshatkhki-p--ikylefisdaiihvlqskhpaefg--a
+spP02164        ---aeiqplaqshatkhki-p--vkylefiseaiiqviqskhsgdfg--a
+spP04248        ---aeiqplaqshatkhki-p--ikylefiseaiiqvlqskhpgdfg--a
+spP02155        ---aelkplaqshatkhki-p--vkylelisdaivhvlqkkhpgdfg--a
+spP02154        ---aelkplaqshatkhki-p--vkylefisdaiihalqkkhpgdfg--a
+spC0HJQ9        ---aelaplaqshatkhki-p--vkylefiseaiiqvlqskhpadfg--a
+spP02187        ---aeiqplaqshatkhki-p--ikylefisdaiihvlqskhpaefg--a
+spQ6PL31        ---aelkplaqshatkhki-p--vkylefiseaiiqvlqskhpgdfg--a
+spP02156        ---aqlaplaqshankhki-p--vkylefiseaiiqvlkskhagdfg--a
+spP04250        ---aelaplaqshatkhki-p--vkylefiseaiiqvlqskhpgdfg--a
+spP14396        ---aeikplaqshatkhki-p--ikylefiseaiihvlqskhpgbfg--a
+spP04249        ---aelaplaqshatkhki-p--vkylefiseaiiqvlqskhpgdfg--a
+spP68080        ---aelkplaqshatkhki-p--ikylefiseaiihvlhskhpaefg--a
+spC0HKB7        ---aeikplaqshatkhki-p--vkylefiseaiiqvlkskhsgdfg--a
+spP02161        ---aelkplaqshatkhki-p--ikylefiseaiihvlqskhpgdfg--a
+spP02185        ---aelkplaqshatkhki-p--ikylefiseaiihvlhsrhpgdfg--a
+spP02168        ---aeikplaqshatkhki-p--vkylefiseaiihvlqnkhsgdfg--t
+spP02184        ---aelkplaqshatkhki-p--ikylefiseaiihvlhsrhpadfg--a
+spP02193        ---aelkplaqshatkhki-s--vqflefiseaiiqviqskhpgdfg--g
+spP02160        ---aelkplaqshatkhki-p--vkylefisdaiiqvlqskhsgdfh--a
+spP63113        ---aelkplaqshatkhki-p--vkylefisdaiiqvlqskhsgdfh--a
+spP02159        ---aelkplaqshatkhki-p--vkylefisdaiiqvlqnkhsgdfh--a
+spP30562        ---aelkplaqshatkhki-p--ikylefiseaiihvlhskhpaefg--a
+spQ9QZ76        ---aeiqplaqshatkhki-p--vkylefiseviiqvlkkrysgdfg--a
+spP02194        ---aelkplaqshatkhki-p--vqflefisdaiiqviqskhagnfg--a
+spP02195        ---aelkplaqshatkhki-s--ikflefiseaiihvlqskhsadfg--a
+spP04247        ---aeiqplaqshatkhki-p--vkylefiseiiievlkkrhsgdfg--a
+spP83682        ---aelkplaqshatkhki-p--ikylxxxxeaiihvlhsrhpaefg--a
+spP80721        ---aevkkiaaqygkdhtsrk--vtkdefmsgepif---tkyfqnlvkda
+spP68189        ---ailkplanshatkhki-p--innfklisevlvkvmhekagl--d--a
+spP02205        ---ailkplanshatkhki-p--innfklisevlvkvmhekagl--d--a
+spQ9DEP1        ---allkplssshatkhki-p--iinfkliaevigkvmeekagl--d--a
+spQ9DEN8        ---allkplssshatkhki-p--iinfkliaevigkvmeekagl--d--a
+spP87497        ---allkplssshatkhki-p--iinfkliaevigkvmeekagl--d--a
+spQ9DEN9        ---allkplssshatkhki-p--iinfkliaevigkvmeekagl--d--a
+spP02214        cvbglakklsrnhlargvs-aadfklleavfkzfldeatqrkatdaq--k
+spQ9DGJ2        ---silkpmanshatkhki-p--innfklisevlvkvmqekagl--d--a
+spQ7M424        cvnglakklsrnhtargit-addfkllqgvfktflde---atgkkat--n
+spQ9DEP0        ---allkplssshatkhki-p--iinftliaevigkvmeekagl--d--a
+spQ7T044        ---allkplssshatkhki-p--iinfkliaevigkvmeekagl--d--a
+spP84298        avnslvsklgddhkargvs-a--aqfgefrt-alvaylqan--vswg--d
+spQ9DGJ0        ---ailkpmanshatkhki-p--innfkliseiivkvmqekagm--d--a
+spP12549        avnslvsklgddhkargvs-a--aqfgefrt-alvaylqan--vswg--d
+spQ23762        avnslvsklgddhkargvs-a--aqfgefrt-alvaylqan--vswg--d
+spQ23763        avnslvsklgddhkargvs-a--aqfgefrt-alvaylsnh--vswg--d
+spP12548        avnslvsklgddhkargvs-a--aqfgefrt-alvaylsnh--vswg--d
+spQ6VN46        ---allkplanthanihkv-a--lnnfrlitevlvkvmaekagl--d--a
+spQ9DGJ1        ---aiikpmanshatkhki-p--iknfelisevigkvmhekagl--d--a
+spQ9DGI9        ---giikplanshatkhki-a--innfkliteiivkvmqekagl--d--a
+spP12550        avyalvsklgvdhkargis-a--aqfgefrt-alvsylqah--vswg--d
+spP29242        avyalvsklgvdhkargis-a--aqfgefrt-alvsylqah--vswg--d
+spQ6I7B0        ---aiikplanshatkhki-p--innfklitealvhvmqekagl--d--a
+spP18966        avnslvsklgddhkargvs-a--aqfgefrt-alvaylqan--vswg--d
+spQ7LZM3        ---selkplaqthatkhki-p--vkylefiseviikviaekhsadfg--a
+spQ7M416        ---gilksqgtahkgr-si-g--ieyfenvlpvidatfaq----qmg--g
+spP29243        avyglvkklgvdhknrgit-q--gqfnefkt-alisylssh--vswg--d
+spP84296        avegllnklgsdhkargvs-a--aqfgefrt-alvsylsnh--vswg--d
+spQ8T7J9        eldviykemasnhkprgvm-k---qqfkdmgqaivtalseiqsksgg--s
+spQ7LZM5        ---selkplaqthatkhki-p--vkylefiseaimkviaekhaadfg--g
+spQ7LZM4        ---selkplaqthatkhki-p--vkylefiseaimkviaekhaadfg--g
+spP19363        qfvymikelgldhinrgtd-r---sfveylkeslgdsvdeftvqsfg--e
+spP09965        ---amldqfskehagf-gv-g--sqqfqnvsamfpgfvasiaappag--a
+spP29287        ---gmldqfskehvgf-gv-g--sqqfenvrsmfpgfvssvaappag--a
+spO76242        d----aaglasrhkgrnvg-s---aefhnakaclakacsahga---p--d
+spP02224        aiqnlakelatshkprgvs-k--dqftefrt-alftylkah--infd--g
+                         .                                        
+
+C0HJR0          daqgamskalelfrnd-maaqykvlgfqg
+P80722          n-qafmeklltkiftg-vagql-------
+spP02191        daqgamskalelfrnd-maaqykvlgfqg
+spP02192        daqaamskalelfrnd-maaqykvlgfhg
+spB7U9B5        daqgamskalelfrnd-maaqykvlgfqg
+spP84997        daqaamskalelfrne-maaqykvlgfhg
+spP68082        daqgamtkalelfrnd-iaakykelgfqg
+spP02189        daqgamskalelfrnd-maakykelgfqg
+spP02165        daqaamskalelfrnd-iaakykelgfqg
+spR9RZK8        daqgamnkalelfrkd-iaakykelgfqg
+spP02170        daqaamskalelfrnd-iaaqykelgfqg
+spP02169        daqaamkkalelfrnd-iaakykelgfqg
+spP02178        daqaamnkalelfrkd-iaakykelgfqg
+spP02181        daqaamnkalelfrkd-iaakykelgfhg
+spP02177        daqaamnkalelfrkd-iaakykelgfqg
+spP02145        daqgamnkalelfrkd-masnykelgfqg
+spP02174        daqgamnkalelfrkd-iaakykelgfhg
+spP11343        daqgamkralelfrnd-iaakykelgfqg
+spP02147        daqgamnkalelfrkd-masnykelgfqg
+spP68277        daqgamnkalelfrkd-iatkykelgfhg
+spP68276        daqgamnkalelfrkd-iaakykelgfhg
+spP02166        daqgamnkalelfrnd-iaakykelgfqg
+spP02144        daqgamnkalelfrkd-masnykelgfqg
+spP68084        daqgamnkalelfrnd-maakykelgfqg
+spP02173        daqgamnkalelfrkd-iaakykelgfhg
+spP02151        daqgamkkalelfrnd-maakykelgfqg
+spP02171        daqgamskalelfrnd-maakykelgfqg
+spP02150        daqgamnkalelfrnd-maakykelgfqg
+spP02179        daqaamnkalelfrkd-iaakykelgfqg
+spP02183        daqgamtkalelfrkd-iaakykelgfhg
+spP02167        daqgamskalelfrnd-iaakykelgfqg
+spP02152        daqgamkkalelfrnd-maakykelgfqg
+spP20856        daqgamskalelfrnd-iaakykelgfqg
+spP02148        daqgamnkalelfrkd-masnykelgfqg
+spP62734        daqgamnkalelfrkd-masnykelgfqg
+spQ0KIY9        daqaamtkalelfrkd-iaakykelgfhg
+spP02153        daqgamkkalelfrnd-maakykelgfqg
+spP02180        daqaamnkalelfrkd-iaakykelgfqg
+spP02163        daqgamgkalelfrnd-iaakykelgfqg
+spQ0KIY6        daqaamnkalelfrkd-iatkykelgfhg
+spP02182        daqaamtkalelfrkd-iaakykelgfhg
+spP02157        eaqgamkkalelfrnd-iaakykelgfqg
+spP32428        dvzgamkralelfrnd-iaakykelgfqg
+spQ0KIY3        daqgamnkalelfrkd-iaakykelgfhg
+spP02186        daqgamkkalelfrnd-iaakykelgfqg
+spP02164        daqgamskalelfrnd-iaakykelgfqg
+spP04248        daqgamskalelfrnd-iaakykelgfqg
+spP02155        daqgamkkalelfrnd-maakykelgfqg
+spP02154        daqgamkkalelfrnd-maakykelgfqg
+spC0HJQ9        dtqgamskalelfrnd-iaakykelgfqg
+spP02187        daqaamkkalelfrnd-iaakykelgfqg
+spQ6PL31        daqgamskalelfrnd-maakykelgfhg
+spP02156        daqgamskalelfrnd-iaakykelgfqg
+spP04250        daqaamskalelfrnd-iaakykelgfqg
+spP14396        dabgamnkalelfrkd-iaakykelgfqg
+spP04249        daqgamskalelfrnd-iaakykelgfqg
+spP68080        daqaamkkalelfrnd-iaakykelgfhg
+spC0HKB7        daqgamskalelfrnd-iaakykelgfqg
+spP02161        dthaamkkalelfrnd-iaakyrelgfqg
+spP02185        daqgamnkalelfrkd-iaakykelgyqg
+spP02168        dvqgamskalelfrnd-iaakykelgfqg
+spP02184        daqgamskalelfrkd-iaakykelgyqg
+spP02193        daqaamgkalelfrnd-maakykelgfqg
+spP02160        dteaamkkalelfrnd-iaakykelgfqg
+spP63113        dteaamkkalelfrnd-iaakykelgfqg
+spP02159        dteaamkkalelfrnd-iaakykelgfqg
+spP30562        daqaamkkalelfrnd-iaakikelgfhg
+spQ9QZ76        daqgamskalelfrnd-iaakykelgfqg
+spP02194        daqaamkk
+
+OUTPUT RESULTS
+	#### File Type= GUIDE_TREE      Format= newick          Name= output/3874/seq.dnd
+	#### File Type= MSA             Format= clustalw        Name= output/3874/seq.aln
+	#### File Type= Template Profile Format= fasta_aln       Name= output/3874/pssm.aln
+
+# Command Line: t_coffee -profile output/3874/pssm.aln -seq output/3874/seq.fasta -output clustalw -outfile output/3874/seq.aln -run_name output/3874/seq  [PROGRAM:T-COFFEE]
+# T-COFFEE Memory Usage: Current= 36.645 Mb, Max= 38.951 Mb
+# Results Produced with T-COFFEE Version_13.46.1.b8b01e06 (2024-06-07 10:18:23 - Revision 114dbc01 - Build 1078)
+# T-COFFEE is available from http://www.tcoffee.org
+# Register on: https://groups.google.com/group/tcoffee/
+alelfrhd-maakykefgfqg
+spP02195        daqaamgkalelfrnd-matkykefgfqg
+spP04247        daqgamskalelfrnd-iaakykelgfqg
+spP83682        daqgamnkalelfrkd-iaakykelgfhg
+spP80721        egkaavekflkhvfpm-maaei-------
+spP68189        ggqtalrnvmgiiiad-leanykelgfsg
+spP02205        ggqtalrnvmgiiiad-leanykelgfsg
+spQ9DEP1        agqtalrnvmaviiad-meadykelgfte
+spQ9DEN8        agqtalrnvmaviiad-meadykelgfte
+spP87497        agqtalrnvmaiiitd-meadykelgfte
+spQ9DEN9        agqtalrnvmaviiad-meadykelgfte
+spP02214        dadgalltml--ika-h-v----------
+spQ9DGJ2        ggqtalrnvmgiiiad-leanykelgftg
+spQ7M424        ehkaawdalltmlik-ahs----------
+spQ9DEP0        agqtalrnvmaiiitd-meadykelgfte
+spQ7T044        agqtalrnvmaiiitd-meadykelgfte
+spP84298        nvaaawnkaldntfa-ivvpr-----l--
+spQ9DGJ0        ggqqalrnvmaaviad-leanykelgfsg
+spP12549        nvaaawnkaldntfa-ivvpr-----l--
+spQ23762        nvaaawnkaldntfa-ivvpr-----l--
+spQ23763        nvaaawnkaldntya-ivvpr-----l--
+spP12548        nvaaawnkaldntya-ivvpr-----l--
+spQ6VN46        agqgalrrvmdavigd-idgyykeigfag
+spQ9DGJ1        agqkalknvmttiiad-ieanykelgftg
+spQ9DGI9        ggqtalrnvmgvfiad-mdanykelgfsg
+spP12550        nvaaawnhaldntya-valksl----e--
+spP29242        nvaaawnhaldntya-valksl----e--
+spQ6I7B0        agqtalrnvmgiviad-leanykelgftg
+spP18966        nvaaawnkaldntfa-ivvpr-----l--
+spQ7LZM3        dsqaamkkalelfrnd-maskykefgfqg
+spQ7M416        aytaamkdalkaawtgvivpgmk-agy--
+spP29243        nvaaawehalentyt-vafevip---a--
+spP84296        nvaaawnkaldntma-vavah-----l--
+spQ8T7J9        fdratwe-alfesva-ngigqyq------
+spQ7LZM5        dsqaamkkalelfrnd-maskykefgfqg
+spQ7LZM4        dsqaamkkalelfrnd-maskykefgfqg
+spP19363        vivnflneglrqa----------------
+spP09965        d--aawgklfgliid-amkkagk------
+spP29287        d--aawgklfgliid-alkkagk------
+spO76242        lgh-----aiddil-----sh-l------
+spP02224        ptetawtlaldttya-mlfsamd---s--
+                         :                   
+
+
+
++ id1=C0HJR0
++ id2=P80722
++ awk -v id1=C0HJR0 -v id2=P80722 '
+NF > 1 {
+    if ($1 == id1 || $1 == id2) {
+        print $0
+        count[$1]++
+        if (count[id1] == count[id2]) print ""
+    }
+}' output/3874/seq.aln
++ python3 format.py output/3874/profile_temp.aln output/3874/Profile.aln
+Formatted alignment saved to output/3874/Profile.aln
++ [[ 0 -eq 0 ]]
++ echo 'Formatting completed. Final alignment saved in output/3874/Profile.aln'
+Formatting completed. Final alignment saved in output/3874/Profile.aln
++ rm -f output/3874/results_swissprot1.txt output/3874/results_swissprot2.txt
++ rm -f output/3874/pssm.clustalw output/3874/pssm.dnd
++ rm -f output/3874/seq.clustalw output/3874/seq.dnd
++ rm -f output/3874/seq1.fasta output/3874/seq2.fasta
++ rm -f output/3874/seq.aln output/3874/seq.fasta
++ rm -f output/3874/pssm.html output/3874/wrong.file output/3874/pssm.fasta output/3874/pssm.aln
++ rm -f output/3874/profile_temp.aln
++ rm -f output/3874/pssm.aln.html
++ rm -f output/3874/debug_command.txt
++ rm -f output/3874/log.txt
++ echo 'Pipeline completed. Output stored in output/3874'
+Pipeline completed. Output stored in output/3874
++ alignment_file=/Profile.aln
++ email_file=/email.txt
++ [[ -f /Profile.aln ]]
